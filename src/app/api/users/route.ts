@@ -1,6 +1,7 @@
+import { saveUserHandler } from '@/controllers/user.controller';
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
-    const data = await req.json();
-    return NextResponse.json(data);
+    const body = await req.json();
+    return saveUserHandler(body);
 }
