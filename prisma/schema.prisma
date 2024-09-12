@@ -31,9 +31,9 @@ model Answer {
   id              Int       @id @default(autoincrement())
   pergunta_id     Int      
   resposta        String
-  user_id         Int
+  usuario_id      Int
   created_at      DateTime  @default(now())
-  user            User      @relation(fields: [user_id], references: [id])
+  user            User      @relation(fields: [usuario_id], references: [id])
 
   @@map("respostas")
 }

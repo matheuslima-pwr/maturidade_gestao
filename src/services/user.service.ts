@@ -30,12 +30,12 @@ export async function saveUser(body: UserDto) {
     }
 }
 
-export async function getAnswersByUserId(userId: string) {
+export async function getAnswersByUserId(userId: number) {
     try {
         // Buscar as respostas no banco de dados
         const answers = await prisma.answer.findMany({
             where: {
-                user_id: parseInt(userId),
+                usuario_id: userId
             },
         });
 
@@ -46,23 +46,46 @@ export async function getAnswersByUserId(userId: string) {
     }
 }
 
-export async function saveUserAnswers(userId: string, answers: { question: string, answer: string }[]) {
+export async function getZoneByUser(userId: number) {
+    try {
+        // Buscar a zona do usuário no banco de dados
+        const answers = await prisma.answer.findMany({
+            where: {
+                usuario_id: userId
+            }
+        });
+        
+        const zone = answers.reduce((acc, answer) => {
+            if (answer.resposta === 'yes') {
+                acc++;
+            }
+            return acc;
+        }, 0);
+        console.log(zone)
+
+        return zone;
+    } catch (error) {
+        console.error('Erro ao buscar zona do usuário:', error);
+        throw new Error('Erro ao buscar zona do usuário');
+    }
+}
+
+export async function saveUserAnswers(userId: number, answers: { questionId: number, answer: string }[]) {
     try {
         // Salvar as respostas no banco de dados
         console.log(answers)
-        // const savedAnswers = await prisma.answer.createMany({
-        //     data: answers.map(answer => ({
-        //         user_id: userId,
-        //         resposta: answer.answer,
-        //         questionId: '', // Add the missing property 'questionId'
-        //         answers: [], // Add the missing property 'answers'
-        //     })),
-        // });
+        const savedAnswers = await prisma.answer.createMany({
+            data: answers.map(answer => ({
+                usuario_id: userId,
+                resposta: answer.answer,
+                pergunta_id: answer.questionId, // Add the missing property 'questionId'
+            })),
+        });
 
         return {
             success: true,
             message: 'Respostas salvas com sucesso!',
-            // data: savedAnswers,
+            data: savedAnswers,
         };
     } catch (error) {
         console.error('Erro ao salvar respostas:', error);

@@ -1,0 +1,20 @@
+.button {
+    background-color: #004477; /* Cor de fundo */
+    color: white; /* Cor do texto */
+    border-radius: 4px; /* Bordas arredondadas */
+    padding: 0.5rem 1rem; /* Espaçamento interno */
+    border: none; /* Remove borda padrão */
+    cursor: pointer; /* Muda o cursor para pointer */
+    transition: background-color 0.3s, color 0.3s; /* Transição suave para hover */
+}
+
+.button:hover {
+    background-color: #003366; /* Cor de fundo no hover */
+    color: #f0f0f0; /* Cor do texto no hover */
+}
+
+.button:disabled {
+    background-color: #888; /* Cor de fundo desativado */
+    color: #e6e6e6; /* Cor do texto desativado */
+    cursor: default;
+}

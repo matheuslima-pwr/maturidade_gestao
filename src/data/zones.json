@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "name": "Zona Crítica",
+        "description": "This is zone 1"
+    },
+    {
+        "id": 2,
+        "name": "Zona de Aperfeiçoamento",
+        "description": ""
+    },
+    {
+        "id": 3,
+        "name": "Zona de Qualidade",
+        "description": "This is zone 3"
+    },
+    {
+        "id": 4,
+        "name": "Zone de Excelência",
+        "description": "Seu negócio já apresenta pontos avançados de gestão, compreendendo a importância do planejamento estratégico,da gestão comercial, de finanças e de pessoas, além de demonstrar um time alinhado com os objetivos da empresa."
+    }
+]

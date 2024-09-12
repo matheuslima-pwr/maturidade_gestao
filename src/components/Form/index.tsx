@@ -1,20 +1,9 @@
-'use client';
-
 import axios from "axios";
-import { MouseEvent, useRef, useState } from "react"; 
+import { useRef } from "react"; 
 import './styles.css'
 import { useRouter } from "next/navigation";
 import { UserDto } from "@/@types/user";
-
-type FormProps = {
-    email: string;
-    username: string;
-    company: string;
-    segment: string;
-    phone: string;
-    invoice: string;
-    [key: string]: string; // Add index signature
-}
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Form() {
     const formRef = useRef<HTMLFormElement>(null);
@@ -67,21 +56,29 @@ export default function Form() {
     }
 
     return (
-        <form ref={formRef} onSubmit={submitInfo} className="flex flex-col p-4 my-10 items-center bg-[#333333] gap-2 rounded-lg">
-            <h3 className="text-lg">Cadastre-se</h3>
-            <label htmlFor="email"></label>
-            <input type="text" id="email" name="email" placeholder="Email" required/>
-            <label htmlFor="nome"></label>
-            <input type="text" id="nome" name="nome" placeholder="Nome" required/>
-            <label htmlFor="empresa"></label>
-            <input type="text" id="empresa" name="empresa" placeholder="Empresa" required/>
-            <label htmlFor="segmento"></label>
-            <input type="text" id="segmento" name="segmento" placeholder="Segmento" required/>
-            <label htmlFor="telefone"></label>
-            <input type="text" id="telefone" onChange={phoneMask} name="telefone" placeholder="Telefone" required/>
-            <label htmlFor="faturamento"></label>
-            <input type="text" id="faturamento" onChange={invoiceMask} name="faturamento" placeholder={`Faturamento Anual de ${lastYear}`} required/>
-            <button type="submit" className="bg-[#004477] h-12 w-32">Enviar</button>
-        </form>  
+        <Card className="w-full max-w-[500px] sm:mt-6 md:mt-8 lg:mt-12 shadow-xl">
+            <CardHeader>
+                <CardTitle className="text-center  sm:text-xl lg:text-3xl">
+                    Cadastre-se
+                </CardTitle>
+            </CardHeader>
+            <CardContent>
+                <form ref={formRef} onSubmit={submitInfo} className="flex flex-col gap-2">
+                    <label htmlFor="email"></label>
+                    <input type="text" id="email" name="email" placeholder="Email" required/>
+                    <label htmlFor="nome"></label>
+                    <input type="text" id="nome" name="nome" placeholder="Nome" required/>
+                    <label htmlFor="empresa"></label>
+                    <input type="text" id="empresa" name="empresa" placeholder="Empresa" required/>
+                    <label htmlFor="segmento"></label>
+                    <input type="text" id="segmento" name="segmento" placeholder="Segmento" required/>
+                    <label htmlFor="telefone"></label>
+                    <input type="text" id="telefone" onChange={phoneMask} name="telefone" placeholder="Telefone" required/>
+                    <label htmlFor="faturamento"></label>
+                    <input type="text" id="faturamento" onChange={invoiceMask} name="faturamento" placeholder={`Faturamento Anual de ${lastYear}`} required/>
+                    <button type="submit" className="bg-[#004477] h-12 w-32 text-white">Enviar</button>
+                </form>  
+            </CardContent>
+        </Card>
     );
 }
