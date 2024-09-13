@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { UserDto } from "@/@types/user";
+import jwt, { Secret } from 'jsonwebtoken';
 
 const prisma = new PrismaClient();
 
@@ -14,7 +15,6 @@ export async function saveUser(body: UserDto) {
             telefone: body.telefone.replace(/\D/g, ''),
             faturamento: parseFloat(body.faturamento.replace(/[R$.\s]/g, '').replace(',', '.'))
         }
-        console.log(data)
         const savedUser = await prisma.user.create({
             data
         });
@@ -54,6 +54,10 @@ export async function getZoneByUser(userId: number) {
                 usuario_id: userId
             }
         });
+
+        if(answers.length === 0) {
+            throw new Error('Usuário não possui respostas');
+        }
         
         const zone = answers.reduce((acc, answer) => {
             if (answer.resposta === 'yes') {
@@ -73,7 +77,12 @@ export async function getZoneByUser(userId: number) {
 export async function saveUserAnswers(userId: number, answers: { questionId: number, answer: string }[]) {
     try {
         // Salvar as respostas no banco de dados
-        console.log(answers)
+        const data = answers.map(answer => ({
+            usuario_id: userId,
+            resposta: answer.answer,
+            pergunta_id: answer.questionId,
+        }));
+        
         const savedAnswers = await prisma.answer.createMany({
             data: answers.map(answer => ({
                 usuario_id: userId,

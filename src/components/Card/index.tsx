@@ -11,18 +11,18 @@ export default function Card({ id, body, onChange, selectedAnswer }: ICard) {
     }
 
     return (
-        <div id={`${id}`} className="bg-white rounded-lg shadow-md p-4 max-w-lg">
-            <p className="text-gray-700">{`${id}. ${body}`}</p>
+        <div id={`${id}`} className="bg-card rounded-lg shadow-md p-4 max-w-lg">
+            <p className="text-card-foreground">{`${id}. ${body}`}</p>
             <div>
-                <label htmlFor="yes" className="text-black mx-1">Sim</label>
-                <input type="radio" id={`yes`} name={`answer-${id}`} value={'yes'} className="bg-[#004477] text-white rounded-md p-2 mt-4"
+                <label htmlFor="yes" className="text-card-foreground mx-1">Sim</label>
+                <input type="radio" id={`yes`} name={`answer-${id}`} value={'yes'} className="p-2 mt-4"
                     onChange={handleInputChange}
                     checked={selectedAnswer === 'yes'}
                 />
             </div>
             <div>
-                <label htmlFor="no" className="text-black mx-1">Não</label>
-                <input type="radio" id={`no`} name={`answer-${id}`} value={'no'} className="bg-[#004477] text-white rounded-md p-2 mt-4"
+                <label htmlFor="no" className="text-card-foreground mx-1">Não</label>
+                <input type="radio" id={`no`} name={`answer-${id}`} value={'no'} className="p-2 mt-4"
                     onChange={handleInputChange}
                     checked={selectedAnswer === 'no'}
                 />

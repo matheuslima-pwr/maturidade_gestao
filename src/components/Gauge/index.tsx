@@ -41,7 +41,8 @@ export default function Gauche({ data, title, description }: GaucheProps) {
     const result = data[0].zone
     const whatsapp = 'https://api.whatsapp.com/send/?phone=5585991636298&text=Quero+entender+meu+nivel+de+maturidade+em+gestao&type=phone_number&app_absent=0'
     return (
-        <Card className="flex flex-col m-2 sm:m-4 md:m-6 lg:m-8 sm:w-full md:max-w-[620px]">
+        <Card className="flex flex-col m-2 sm:m-4 md:m-6 lg:m-8 sm:w-full md:max-w-[620px] relative">
+            <img src="/img/card-bg.jpg" alt="Background card" className="w-full h-full rounded-lg opacity-20 absolute"/>
             <CardHeader className="items-center pb-0">
                 <CardTitle>
                     <div className="text-center flex flex-col gap-4 sm:gap-6 lg:gap-8">
@@ -89,7 +90,7 @@ export default function Gauche({ data, title, description }: GaucheProps) {
                     estado atual da sua empresa?
                     `}
                 </p>
-                <div className="w-full text-white rounded-lg h-auto bg-[#004477] px-2 py-3 sm:px-4 sm:py-4 mt-4 text-center hidden sm:block">
+                <div className="w-full text-white rounded-lg h-auto bg-[#004477] px-2 py-3 sm:px-4 sm:py-4 mt-4 text-center hidden sm:block z-10">
                     <p className="text-center text-base sm:text-lg lg:text-xl font-semibold mb-2">
                         Agende sua devolutiva hoje mesmo!
                     </p>

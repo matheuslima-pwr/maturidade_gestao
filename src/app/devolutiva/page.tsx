@@ -1,10 +1,26 @@
-import Gauge from "@/components/Gauge";
-import axios from "axios";
+'use client'
 
-export default async function Devolutiva() {
-    const userId = sessionStorage.getItem('userId');
-    const res  = await axios.get(`/api/users/${userId}/zone`);
-    let zone = res.data.data.zone;
+import Gauge from "@/components/Gauge";
+import { Skeleton } from "@/components/ui/skeleton";
+import api from "@/app/api";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
+
+type Zone = {
+    id: number;
+    name: string;
+    description: JSX.Element;
+    min: number;
+    max: number;
+}
+
+export default function Devolutiva() {
+    const [value, setValue] = useState(0);
+    const [zone, setZone] = useState<Zone>({ id: 0, name: "", description: <></>, min: 0, max: 0 });
+    const [loading, setLoading] = useState(true);
+    const [authorized, setAuthorized] = useState(false);
+    const router = useRouter();
 
     const zones = [
         {
@@ -54,9 +70,8 @@ export default async function Devolutiva() {
                     bases intermediárias de gestão, permitindo
                     acessar dados que possibilitam tomar decisões satisfatórias em
                     algumas áreas.<br/><br/>
-                    Neste estágio, é comum que os setores da empresa estejam em
-                    <strong>diferentes níveis de maturidade</strong>. Cabe ao líder buscar ajuda para
-                    identificar e priorizar as áreas que mais necessitam de atenção no
+                    Neste estágio, é comum que os setores da empresa estejam em <strong>diferentes níveis de maturidade</strong>. 
+                    Cabe ao líder buscar ajuda para identificar e priorizar as áreas que mais necessitam de atenção no
                     momento atual.<br/><br/>
                     Recomendamos buscar <strong>visões estratégicas</strong> externas para "forçar” a
                     gestão a continuar evoluindo. Por estar em um nível intermediário, é
@@ -94,26 +109,62 @@ export default async function Devolutiva() {
         }
     ]
 
-    const getZoneDesc = (value: number) => {
+    const getZoneInfo = (value: number) => {
         for (const zone of zones) {
             if (value >= zone.min && value <= zone.max) {
-                return zone;
+                setZone(zone);
+                return;
             }
         }
-        return zones[0];
+        setZone(zones[0]);
     }
 
-    const zoneDesc = getZoneDesc(1);
+    useEffect(() => {
+        const fetchZone = async () => {
+            const userId = sessionStorage.getItem('userId');
+            if(!userId) {
+                router.push('/');
+                return;
+            }
+            try {
+                const res = await api.get(`/api/users/${userId}/zone`);
+                setValue(res.data);
+                setAuthorized(true);
+                getZoneInfo(res.data)
+                setLoading(false);
+            } catch (error) {
+                const { isConfirmed } = await Swal.fire({
+                    title: 'Erro',
+                    text: 'Ocorreu um erro ao buscar a zona do usuário. Tente novamente mais tarde.',
+                    icon: 'error'
+                })
+                if(isConfirmed) {
+                    sessionStorage.removeItem('userId');
+                    router.push('/');
+                }
+            }
+        }
+        fetchZone();
+    }, [router]);
 
+    if(!authorized) return <></>
+
+    if(loading) {
+        return (
+        <div className="w-[620px] h-[90vh] bg-white relative overflow-hidden rounded-xl mt-8">
+                    <Skeleton className="h-full w-full rounded-xl animate-pulse" />
+        </div>
+        )}
     return (
         <section>
             <Gauge 
-                title={zoneDesc.name}
-                description={zoneDesc.description}
+                title={zone.name}
+                description={zone.description}
                 data={[{
-                    target: 20 - zone,
-                    zone
+                    target: 20 - Number(value),
+                    zone: Number(value)
             }]}/>
         </section>
+        
     )
 }

@@ -1,0 +1,62 @@
+#termos {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 24px auto;
+    width: 90%;
+    font-size: 14px;
+}
+
+#termos h1, #termos h4 {
+    text-transform: uppercase;
+    align-self: center;
+}
+
+#termos h4 {
+    font-size: 21px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+#termos p {
+    font-size: 14px;
+    text-align: justify;
+    text-justify: inter-word;
+    margin-left: 0;
+    margin-bottom: 14px;
+}
+
+#termos span {
+    margin-bottom: 8px;
+}
+
+#termos ol {
+    margin-left: 5%;
+    align-self: flex-start;
+    margin-bottom: 14px;
+}
+
+#termos div {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+
+}
+
+#termos div > span {
+    width: min-content;
+    margin: 0;
+}
+
+#termos div > i {
+    margin: 0 8px;
+}
+
+@media screen and (min-width: 768px) {
+    #termos {
+        width: 70%;
+    }
+    
+}

@@ -1,20 +1,32 @@
 'use client';
 
 import Card from "@/components/Card";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import questions from "@/data/questions.json";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner"
 import styles from '@/app/styles/button.module.css';
-import axios from "axios";
+import api from "@/app/api";
+import Swal from "sweetalert2";
 
 export default function Diagnostico() {
     const [currentPage, setCurrentPage] = useState(1);
     const [answers, setAnswers] = useState<{ questionId: number, answer: string }[]>([]);
+    const [loading, setLoading] = useState(true);
     const router = useRouter();
 
     const questionsPerPage = 10;
     const totalPages = Math.ceil(questions.length / questionsPerPage);
+
+    useEffect(() => {
+        const userId = sessionStorage.getItem('userId');
+        if(!userId) {
+            router.push('/');
+        } else {
+            setLoading(false);
+        }
+    }, [router]);
+
 
     const handleAnswerChange = (id: number, answer: string) => {
         setAnswers((prevAnswers) => {
@@ -32,13 +44,48 @@ export default function Diagnostico() {
 
     const submitAnswers = async () => {
         const userId = sessionStorage.getItem('userId');
-        const body = [
-            ...answers
-        ]
-        console.log(body)
-        const res = await axios.post(`/api/users/${userId}/answers`, body);
-        router.push('/devolutiva');
+        const { isConfirmed } = await Swal.fire({
+            title: 'Deseja enviar suas respostas?',
+            showCancelButton: true,
+            confirmButtonText: 'Confirmar',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#004477',
+            cancelButtonColor: '#004477',
+            icon: 'question'
+        });
+
+        if(isConfirmed) {
+            Swal.fire({
+                title: 'Enviando respostas...',
+                showConfirmButton: false,
+                showCancelButton: false,
+                allowOutsideClick: false,
+                html: `<div id="loading-container">
+                            <img id="loading" src="/img/loading.gif" alt="Loading" />
+                        </div>`
+            })
+            try {
+                const body = [
+                    ...answers
+                ]
+                const res = await api.post(`/api/users/${userId}/answers`, body);
+                Swal.close();
+                router.push('/devolutiva');
+            } catch (error: any) {
+                Swal.fire({
+                    title: `Erro ${error.response.status}`,
+                    text: 'Ocorreu um erro ao enviar suas respostas. Tente novamente mais tarde.',
+                    icon: 'error'
+                })    
+            }
+        }
     }
+
+    const handlePreviousPage = () => {
+        setCurrentPage(currentPage - 1);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
 
     const allAnswersGiven = () => {
         const indexOfLastQuestion = currentPage * questionsPerPage;
@@ -52,7 +99,8 @@ export default function Diagnostico() {
     const indexOfLastQuestion = currentPage * questionsPerPage;
     const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
     const currentQuestions = questions.slice(indexOfFirstQuestion, indexOfLastQuestion);
-
+    
+    if(loading) return <></>
     return (
         <section className="h-full flex flex-col items-center py-4 px-8">
             <header className="mt-1 bg-[#004477] w-full h-12 rounded-t-md flex justify-center items-center">
@@ -72,7 +120,7 @@ export default function Diagnostico() {
             </div>
             <div className="flex justify-start gap-2 w-full mt-4">
                 <button className={styles.button}
-                    onClick={() => setCurrentPage(currentPage-1)}
+                    onClick={handlePreviousPage}
                     disabled={currentPage <= 1}
                 >Voltar</button>
                 {currentPage === totalPages ? 

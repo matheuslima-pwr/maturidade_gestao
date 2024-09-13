@@ -9,12 +9,15 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+		backgroundImage: {
+			'card-bg': 'url("/img/card-bg.jpg")',
+		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
   				DEFAULT: 'hsl(var(--card))',
-  				foreground: 'hsl(var(--card-foreground))'
+  				foreground: 'hsl(var(--card-foreground))',
   			},
   			popover: {
   				DEFAULT: 'hsl(var(--popover))',
