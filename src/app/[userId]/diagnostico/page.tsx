@@ -33,7 +33,7 @@ export default function Diagnostico({ params }: DiagnosticoProps) {
         } else {
             setLoading(false);
         }
-    }, [router]);
+    }, [router, userId]);
 
     const allAnswersGiven = () => {
         const indexOfLastQuestion = currentPage * questionsPerPage;
@@ -91,12 +91,12 @@ export default function Diagnostico({ params }: DiagnosticoProps) {
                 const body = [
                     ...answers
                 ]
-                const res = await api.post(`/api/users/${userId}/answers`, body);
+                await api.post(`/api/users/${userId}/answers`, body);
                 Swal.close();
                 router.push(`/${userId}/devolutiva`);
-            } catch (error: any) {
+            } catch (error) {
                 Swal.fire({
-                    title: `Erro ${error.response.status}`,
+                    title: `Erro`,
                     text: 'Ocorreu um erro ao enviar suas respostas. Tente novamente mais tarde.',
                     icon: 'error'
                 })    
@@ -107,7 +107,7 @@ export default function Diagnostico({ params }: DiagnosticoProps) {
     const handlePreviousPage = () => {
         setCurrentPage(currentPage - 1);
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        let form = document.querySelector('.form');
+        const form = document.querySelector('.form');
         form?.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -121,7 +121,7 @@ export default function Diagnostico({ params }: DiagnosticoProps) {
         }
         setCurrentPage(currentPage + 1);
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        let form = document.querySelector('.form');
+        const form = document.querySelector('.form');
         form?.scrollTo({ top: 0, behavior: 'smooth' });
         setBorder(false);
     }

@@ -58,19 +58,18 @@ export default function Form() {
                 const userId = res.data.userId;
                 Swal.close();
                 router.push(`/${userId}/diagnostico`);    
-            } catch (error: any) {
+            } catch (error) {
                 Swal.fire({
-                    title: `Erro ${error.response.status}`,
+                    title: `Erro`,
                     text: 'Ocorreu um erro ao cadastrar seus dados. Tente novamente mais tarde.',
                     icon: 'error'
                 })
             }
         }
     }
-    
 
     const phoneMask = (event: React.ChangeEvent<HTMLInputElement>) => {
-        let value = event.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/)
+        const value = event.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/)
         if (value) {
             event.target.value = !value[2] ? value[1] : '(' + value[1] + ') ' + value[2] + (value[3] ? '-' + value[3] : '')
         }

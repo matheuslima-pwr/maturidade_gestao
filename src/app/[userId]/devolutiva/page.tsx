@@ -1,7 +1,6 @@
 'use client'
 
 import { redirect } from 'next/navigation'; // para redirecionar de forma server-side
-import Swal from 'sweetalert2';
 import api from '@/app/api';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Globe, Phone } from 'lucide-react';
@@ -114,14 +113,6 @@ const zones: Zone[] = [
     }
 ];
 
-const getZoneInfo = (value: number): Zone => {
-    for (const zone of zones) {
-        if (value >= zone.min && value <= zone.max) {
-            return zone;
-        }
-    }
-    return zones[0];
-}
 
 export default function Devolutiva({ params }: DevolutivaProps) {
     const [zone, setZone] = useState<Zone>({ id: 0, name: '', description: <></>, min: 0, max: 0 });
@@ -135,13 +126,23 @@ export default function Devolutiva({ params }: DevolutivaProps) {
         redirect('/');
     }
 
+    const getZoneInfo = (value: number) => {
+        console.log(value)
+        for (const zone of zones) {
+            if (value >= zone.min && value <= zone.max) {
+                setZone(zone);
+                return;
+            }
+        }
+        setZone(zones[0]);
+    }
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const res = await api.get(`/api/users/${userId}/zone`);
                 setValue(res.data);
-                setZone(getZoneInfo(value));
+                getZoneInfo(res.data);                
                 setLoading(false);
             } catch (error) {
                 console.error(error);
@@ -151,8 +152,8 @@ export default function Devolutiva({ params }: DevolutivaProps) {
     }, [userId]);
 
     const data = [{
-        target: 20 - Number(value),
-        zone: Number(value)
+        target: 20 - value,
+        zone: value
     }]
 
     if(loading) {

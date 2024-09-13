@@ -1,4 +1,3 @@
-import { Toaster } from "@/components/ui/sonner";
 
 interface DiagnosticoLayoutProps {
     children: React.ReactNode;
