@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -19,10 +20,19 @@ const config: Config = {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))',
   			},
+			form: {
+				DEFAULT: 'var(--form)',
+				foreground: 'var(--form-foreground)',
+				shadow: 'var(--form-shadow)',
+			},
   			popover: {
-  				DEFAULT: 'hsl(var(--popover))',
-  				foreground: 'hsl(var(--popover-foreground))'
+  				DEFAULT: 'var(--popover)',
+  				foreground: 'var(--popover-foreground)'
   			},
+			toast: {
+				DEFAULT: 'var(--toast)',
+				foreground: 'var(--toast-foreground)',
+			},
   			primary: {
   				DEFAULT: 'hsl(var(--primary))',
   				foreground: 'hsl(var(--primary-foreground))'
@@ -43,7 +53,7 @@ const config: Config = {
   				DEFAULT: 'hsl(var(--destructive))',
   				foreground: 'hsl(var(--destructive-foreground))'
   			},
-  			border: 'hsl(var(--border))',
+  			border: 'var(--border)',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
   			chart: {

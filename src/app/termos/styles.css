@@ -1,3 +1,7 @@
+body {
+    background: #fff;
+}
+
 #termos {
     display: flex;
     flex-direction: column;

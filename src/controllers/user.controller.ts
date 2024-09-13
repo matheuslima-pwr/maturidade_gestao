@@ -5,7 +5,7 @@ import { SignJWT } from 'jose';
 
 // controllers/answerController.ts
 
-export async function getAnswersByUserIdHandler(userId: number) {
+export async function getAnswersByUserIdHandler(userId: string) {
     try {
         // Chama o serviço para buscar as respostas
         const answers = await getAnswersByUserId(userId);
@@ -15,7 +15,7 @@ export async function getAnswersByUserIdHandler(userId: number) {
     }
 }
 
-export async function getZoneByUserHandler(userId: number) {
+export async function getZoneByUserHandler(userId: string) {
     try {
         // Chama o serviço para buscar a zona do usuário
         const zone = await getZoneByUser(userId);
@@ -33,7 +33,7 @@ export async function saveUserHandler(body: UserDto) {
         // Cria o token JWT
         const token = await new SignJWT({ email: body.email })
                             .setProtectedHeader({ alg: 'HS256' })
-                            .setExpirationTime('1h')
+                            .setExpirationTime('5h')
                             .sign(new TextEncoder().encode(process.env.JWT_SECRET as string));
 
         // Cria a resposta com o status e o cookie
@@ -41,7 +41,7 @@ export async function saveUserHandler(body: UserDto) {
         response.cookies.set('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production', // Só define como secure em produção
-            maxAge: 3600, // Tempo de expiração em segundos
+            maxAge: 5 * 3600, // Tempo de expiração em segundos
             path: '/',
             sameSite: 'strict', // Pode ajustar conforme necessário
         });
@@ -52,12 +52,8 @@ export async function saveUserHandler(body: UserDto) {
     }
 }
 
-export async function saveAnswersHandler(userId: number, answers: { questionId: number, answer: string }[]) {
+export async function saveAnswersHandler(userId: string, answers: { questionId: number, answer: string }[]) {
     try {
-        if (!answers || answers.length === 0) {
-            return NextResponse.json({ error: 'Nenhuma resposta fornecida.' }, { status: 400 }); // Bad Request
-        }
-
         // Chama o serviço para salvar as respostas
         const result = await saveUserAnswers(userId, answers);
         return NextResponse.json(result, { status: 201 }); // Created

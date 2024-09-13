@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client';
 import { UserDto } from "@/@types/user";
-import jwt, { Secret } from 'jsonwebtoken';
 
 const prisma = new PrismaClient();
 
@@ -22,7 +21,7 @@ export async function saveUser(body: UserDto) {
         return {
             success: true,
             message: 'Usuário salvo com sucesso!',
-            data: savedUser,
+            userId: savedUser.id,
         };
     } catch (error) {
         console.error('Erro ao salvar usuário:', error);
@@ -30,7 +29,7 @@ export async function saveUser(body: UserDto) {
     }
 }
 
-export async function getAnswersByUserId(userId: number) {
+export async function getAnswersByUserId(userId: string) {
     try {
         // Buscar as respostas no banco de dados
         const answers = await prisma.answer.findMany({
@@ -46,7 +45,7 @@ export async function getAnswersByUserId(userId: number) {
     }
 }
 
-export async function getZoneByUser(userId: number) {
+export async function getZoneByUser(userId: string) {
     try {
         // Buscar a zona do usuário no banco de dados
         const answers = await prisma.answer.findMany({
@@ -74,20 +73,17 @@ export async function getZoneByUser(userId: number) {
     }
 }
 
-export async function saveUserAnswers(userId: number, answers: { questionId: number, answer: string }[]) {
+export async function saveUserAnswers(userId: string, answers: { questionId: number, answer: string }[]) {
     try {
-        // Salvar as respostas no banco de dados
-        const data = answers.map(answer => ({
-            usuario_id: userId,
-            resposta: answer.answer,
-            pergunta_id: answer.questionId,
-        }));
+        if (!answers || answers.length === 0) {
+            throw new Error('Nenhuma resposta fornecida.');
+        }
         
         const savedAnswers = await prisma.answer.createMany({
             data: answers.map(answer => ({
                 usuario_id: userId,
                 resposta: answer.answer,
-                pergunta_id: answer.questionId, // Add the missing property 'questionId'
+                pergunta_id: answer.questionId,
             })),
         });
 

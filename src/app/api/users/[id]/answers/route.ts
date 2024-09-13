@@ -2,12 +2,12 @@
 import { getAnswersByUserIdHandler, saveAnswersHandler } from '@/controllers/user.controller';
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
-    const userId = parseInt(params.id);
+    const userId = params.id;
     return getAnswersByUserIdHandler(userId);
 }
 
 export async function POST(request: Request, { params }: { params: { id: string } }) {
-    const userId = parseInt(params.id);
+    const userId = params.id;
 
     // Extrai o corpo da requisição (as respostas)
     const body = await request.json();

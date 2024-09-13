@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User {
-  id            Int         @id @default(autoincrement())
+  id            String         @id @default(uuid())
   email         String    
   nome          String
   empresa       String
@@ -22,7 +22,7 @@ model User {
   telefone      String
   faturamento   Float
   created_at    DateTime    @default(now())
-  respostas     Answer[]
+  respostas     Answer[]    @relation("UserAnswers")
 
   @@map("usuarios")
 }
@@ -31,9 +31,9 @@ model Answer {
   id              Int       @id @default(autoincrement())
   pergunta_id     Int      
   resposta        String
-  usuario_id      Int
+  usuario_id      String
   created_at      DateTime  @default(now())
-  user            User      @relation(fields: [usuario_id], references: [id])
+  user            User      @relation("UserAnswers", fields: [usuario_id], references: [id])
 
   @@map("respostas")
 }

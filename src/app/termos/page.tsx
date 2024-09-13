@@ -3,7 +3,7 @@ import './styles.css';
 
 export default function Termos() {
     return (
-    <main id="termos">
+    <main id="termos">        
         <h1 className="mb-4 text-4xl leading-none tracking-tight md:text-4xl lg:text-5xl dark:text-white self-center"><u>Termo de Uso</u></h1>
         <p>Para acessar determinados serviços do Grupo PWR, temos o compromisso de esclarecer quais são seus direitos, suas obr/igações e como entrar em contato conosco, caso possua alguma dúvida e/ou reclamação.</p>
         <h4>Seus direitos</h4>
@@ -86,7 +86,7 @@ export default function Termos() {
             <span className='text-16 w-fit'>automacao@pwrgestao.com</span>
             <EnvelopeClosedIcon/>
         </div>
-        <br/><br/><br/>
+        <br/><br/><br/>     
     </main>
     )
 }
