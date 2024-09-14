@@ -1,8 +1,8 @@
 // src/app/api/users/[id]/answers/route.ts
 import { getAnswersByUserIdHandler, saveAnswersHandler } from '@/controllers/user.controller';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 
-export async function GET({ params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
     const userId = params.id;
     return getAnswersByUserIdHandler(userId);
 }
