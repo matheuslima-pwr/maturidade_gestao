@@ -120,7 +120,7 @@ export default function Devolutiva({ params }: DevolutivaProps) {
     const [loading, setLoading] = useState(true);
 
     const { userId } = params;
-    const whatsapp = 'https://api.whatsapp.com/send/?phone=5585991636298&text=Quero+entender+meu+nivel+de+maturidade+em+gestao&type=phone_number&app_absent=0'
+    const whatsapp = 'https://api.whatsapp.com/send/?phone=5585981553698&text=Quero+entender+meu+nivel+de+maturidade+em+gestao&type=phone_number&app_absent=0'
     
     if (!userId) {
         redirect('/');
@@ -194,7 +194,7 @@ export default function Devolutiva({ params }: DevolutivaProps) {
                             Agende sua devolutiva hoje mesmo!
                         </p>
                         <div className="inline-flex items-center text-sm sm:text-base lg:text-lg">
-                            <Phone size={18} color="#ff5900"/><a href={whatsapp} target='_blank' className="mr-8 ml-2">(85) 9 9163-6298</a>
+                            <Phone size={18} color="#ff5900"/><a href={whatsapp} target='_blank' className="mr-8 ml-2">(85) 9 8155-3698</a>
                         </div>
                         <div className="inline-flex items-center text-sm sm:text-base lg:text-lg">
                             <Globe size={18} color="#ff5900"/><a href="https://pwrgestao.com" target="_blank" className="ml-2">www.pwrgestao.com.br</a>
