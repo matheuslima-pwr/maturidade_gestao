@@ -91,9 +91,9 @@ export default function Diagnostico({ params }: DiagnosticoProps) {
                 const body = [
                     ...answers
                 ]
-                await api.post(`/api/users/${userId}/answers`, body);
+                await api.post(`/api/matges/users/${userId}/answers`, body);
                 Swal.close();
-                router.push(`/${userId}/devolutiva`);
+                router.push(`/maturidade-gestao/${userId}/devolutiva`);
             } catch (error) {
                 Swal.fire({
                     title: `Erro`,

@@ -1,39 +1,79 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  schemas  = ["public", "maturidade_gestao", "posicionamento_estrategico"]
 }
 
 model User {
-  id            String         @id @default(uuid())
-  email         String    
+  id            Int         @id @default(autoincrement())
+  email         String
   nome          String
   empresa       String
   segmento      String
   telefone      String
   faturamento   Float
   created_at    DateTime    @default(now())
-  respostas     Answer[]    @relation("UserAnswers")
 
   @@map("usuarios")
+  @@schema("public")
 }
 
-model Answer {
+model UserMaturidadeGestao {
+  id            String         @id @default(uuid())
+  email         String
+  nome          String
+  empresa       String
+  segmento      String
+  telefone      String
+  faturamento   Float
+  created_at    DateTime    @default(now())
+  respostas     AnswerMaturidadeGestao[] @relation("UserMaturidadeGestaoAnswers")
+
+  @@map("usuarios")
+  @@schema("maturidade_gestao")
+}
+
+model AnswerMaturidadeGestao {
   id              Int       @id @default(autoincrement())
-  pergunta_id     Int      
+  pergunta_id     Int
   resposta        String
   usuario_id      String
   created_at      DateTime  @default(now())
-  user            User      @relation("UserAnswers", fields: [usuario_id], references: [id])
+  user            UserMaturidadeGestao @relation("UserMaturidadeGestaoAnswers", fields: [usuario_id], references: [id])
 
   @@map("respostas")
+  @@schema("maturidade_gestao")
+}
+
+model UserPosEst {
+  id            Int         @id @default(autoincrement())
+  email         String
+  nome          String
+  empresa       String
+  segmento      String
+  telefone      String
+  faturamento   Float
+  created_at    DateTime    @default(now())
+  respostas     AnswerPosEst[] @relation("UserPosEstAnswers")
+
+  @@map("usuarios")
+  @@schema("posicionamento_estrategico")
+}
+
+model AnswerPosEst {
+  id              Int       @id @default(autoincrement())
+  pergunta_id     Int
+  pontuacao       Int
+  usuario_id      Int
+  created_at      DateTime  @default(now())
+  user            UserPosEst @relation("UserPosEstAnswers", fields: [usuario_id], references: [id])
+
+  @@map("respostas")
+  @@schema("posicionamento_estrategico")
 }

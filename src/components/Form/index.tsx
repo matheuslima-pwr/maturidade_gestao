@@ -54,10 +54,10 @@ export default function Form() {
                     telefone: form?.telefone.value,
                     faturamento: form?.faturamento.value
                 }
-                const res = await api.post('/api/users', body);
+                const res = await api.post('/api/matges/users', body);
                 const userId = res.data.userId;
                 Swal.close();
-                router.push(`/${userId}/diagnostico`);    
+                router.push(`/maturidade-gestao/${userId}/diagnostico`);    
             } catch (error) {
                 Swal.fire({
                     title: `Erro`,

@@ -140,7 +140,7 @@ export default function Devolutiva({ params }: DevolutivaProps) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await api.get(`/api/users/${userId}/zone`);
+                const res = await api.get(`/api/matges/users/${userId}/zone`);
                 setValue(res.data);
                 getZoneInfo(res.data);                
                 setLoading(false);
