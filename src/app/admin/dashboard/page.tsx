@@ -46,7 +46,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-export const description = "A radar chart with a legend"
+
 const chartData = [
   { total: "Comercial e Vendas", Media: 75, Resposta: 80 },
   { total: "Financeiro", Media: 30, Resposta: 65 },
