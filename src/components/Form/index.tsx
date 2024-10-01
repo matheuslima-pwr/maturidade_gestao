@@ -49,6 +49,7 @@ export default function Form() {
                 const body: UserDto = {
                     email: form?.email.value,
                     nome: form?.nome.value,
+                    cargo: form?.cargo.value,
                     empresa: form?.empresa.value,
                     segmento: form?.segmento.value,
                     telefone: form?.telefone.value,
