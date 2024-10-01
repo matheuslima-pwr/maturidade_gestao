@@ -49,6 +49,7 @@ export default function Home() {
         const body: UserDto = {
           email: form?.email.value,
           nome: form?.nome.value,
+          cargo: form?.cargo.value,
           empresa: form?.empresa.value,
           segmento: form?.segmento.value,
           telefone: form?.telefone.value,
@@ -106,6 +107,8 @@ export default function Home() {
           <label htmlFor="email"></label>
           <input className={styles.input} type="text" id="nome" name="nome" placeholder="Nome" required />
           <label htmlFor="nome"></label>
+          <input className={styles.input} type="text" id="cargo" name="cargo" placeholder="Cargo" required />
+          <label htmlFor="cargo"></label>
           <input className={styles.input} type="text" id="empresa" name="empresa" placeholder="Empresa" required />
           <label htmlFor="empresa"></label>
           <input className={styles.input} type="text" id="segmento" name="segmento" placeholder="Segmento" required />

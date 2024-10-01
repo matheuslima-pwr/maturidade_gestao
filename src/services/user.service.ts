@@ -9,6 +9,7 @@ export async function saveUser(body: UserDto) {
         const data = {
             email: body.email,
             nome: body.nome,
+            cargo: body.cargo,
             empresa: body.empresa,
             segmento: body.segmento,
             telefone: body.telefone.replace(/\D/g, ''),
