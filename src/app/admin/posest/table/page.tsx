@@ -11,28 +11,41 @@ import { Download, ChevronLeft, ChevronRight, Trash2 } from "lucide-react"
 import api from "@/app/api"
 
 type Data = {
-    id: string
-    nome: string
-    email: string
-    empresa: string
-    segmento: string
-    telefone: string
-    faturamento: string
-    operacional: string
-    cliente: string
-    produto: string
+  id: string
+  nome: string
+  email: string
+  empresa: string
+  segmento: string
+  telefone: string
+  faturamento: string
+  operacional: string
+  cliente: string
+  produto: string
 }
 
 export default function DataVisualizationPage() {
-    const [data, setData] = useState<Data[]>([])
-    const [currentPage, setCurrentPage] = useState(1)
-    const [itemsPerPage, setItemsPerPage] = useState(50)
-    const [nameFilter, setNameFilter] = useState("")
-    const [itemToDelete, setItemToDelete] = useState<{ id: string; nome: string } | null>(null)
-    
-    const filteredData = data.filter(item => 
-        item.nome.toLowerCase().includes(nameFilter.toLowerCase())
-    )
+  const [data, setData] = useState<Data[]>([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(50)
+  const [nameFilter, setNameFilter] = useState("")
+  const [itemToDelete, setItemToDelete] = useState<{ id: string; nome: string } | null>(null)
+
+  const filteredData = data.filter(item =>
+    item.nome.toLowerCase().includes(nameFilter.toLowerCase())
+  )
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.get("/api/posest/users")
+        console.log(response.data)
+        setData(response.data)
+      } catch (error) {
+        console.error("Error fetching data:", error)
+      }
+    }
+    fetchData();
+  }, [])
 
   const pageCount = Math.ceil(filteredData.length / itemsPerPage)
   const currentData = filteredData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
@@ -63,7 +76,7 @@ export default function DataVisualizationPage() {
   }
 
   return (
-    <div className="container mx-auto py-8">      
+    <div className="container mx-auto py-8">
       <div className="flex flex-col md:flex-row gap-4 mb-6">
         <Input
           placeholder="Filter by name"

@@ -1,82 +1,102 @@
 [
     {
         "id": 1,
-        "content": "Você elaborou um Planejamento Estratégico onde ficam claros os objetivos da empresa para o futuro (Faturamento, Mercado de atuação, Novos produtos e serviços, Lucro, Geração de Caixa e etc.)?"
+        "content": "Você elaborou um Planejamento Estratégico onde ficam claros os objetivos da empresa para o futuro (Faturamento, Mercado de atuação, Novos produtos e serviços, Lucro, Geração de Caixa e etc.)?",
+        "pillar": "Estratégia e Gestão"
     },
     {
         "id": 2,
-        "content": "Você tem a cultura (propósito, missão, valores e visão) da sua empresa definida, documentada e disseminada?"
+        "content": "Você tem a cultura (propósito, missão, valores e visão) da sua empresa definida, documentada e disseminada?",
+        "pillar": "Estratégia e Gestão"
     },
     {
         "id": 3,
-        "content": "Você realiza análise dos cenários externos para identificar oportunidades e ameaças para o seu negócio (Conhece e acompanha cenários políticos, econômicos e as atividades dos concorrentes)?"
+        "content": "Você realiza análise dos cenários externos para identificar oportunidades e ameaças para o seu negócio (Conhece e acompanha cenários políticos, econômicos e as atividades dos concorrentes)?",
+        "pillar": "Estratégia e Gestão"
     },
     {
         "id": 4,
-        "content": "Na sua empresa você possui um plano de ação, detalhando tudo o que precisa ser feito para alcançar os objetivos definidos? o que normalmente é planejado é posto em prática de forma a gerar os resultados esperados?"
+        "content": "Na sua empresa você possui um plano de ação, detalhando tudo o que precisa ser feito para alcançar os objetivos definidos? o que normalmente é planejado é posto em prática de forma a gerar os resultados esperados?",
+        "pillar": "Estratégia e Gestão"
     },
     {
         "id": 5,
-        "content": "Na sua empresa o que normalmente é planejado é executado de forma a gerar os resultados esperados, havendo acompanhamento e cobrança dos responsáveis pelas ações?"
+        "content": "Na sua empresa o que normalmente é planejado é executado de forma a gerar os resultados esperados, havendo acompanhamento e cobrança dos responsáveis pelas ações?",
+        "pillar": "Estratégia e Gestão"
     },
     {
         "id": 6,
-        "content": "Você sabe exatamente quais os resultados econômicos e financeiros da sua empresa mensalmente (margem, ponto de equilíbrio, EBTIDA, lucro líquido, geração de caixa, endividamento etc.)?"
+        "content": "Você sabe exatamente quais os resultados econômicos e financeiros da sua empresa mensalmente (margem, ponto de equilíbrio, EBTIDA, lucro líquido, geração de caixa, endividamento etc.)?",
+        "pillar": "Financeiro"
     },
     {
         "id": 7,
-        "content": "É realizada mensalmente uma reunião de apuração e acompanhamento dos indicadores financeiros da empresa para auxiliar na tomada de decisão que gere plano de ação para melhorias?"
+        "content": "É realizada mensalmente uma reunião de apuração e acompanhamento dos indicadores financeiros da empresa para auxiliar na tomada de decisão que gere plano de ação para melhorias?",
+        "pillar": "Financeiro"
     },
     {
         "id": 8,
-        "content": "Sua empresa calcula mensalmente o efeito financeiro dos gastos mensais das despesas silenciosas (aquelas que não observamos no caixa, mas que estão acontecendo invariavelmente : provisão de férias, 13°, depreciação e inadimplência)?"
+        "content": "Sua empresa calcula mensalmente o efeito financeiro dos gastos mensais das despesas silenciosas (aquelas que não observamos no caixa, mas que estão acontecendo invariavelmente : provisão de férias, 13°, depreciação e inadimplência)?",
+        "pillar": "Financeiro"
     },
     {
         "id": 9,
-        "content": "Sua empresa possui uma estratégia objetiva de redução de custos e estudos de eficiência de gastos?"
+        "content": "Sua empresa possui uma estratégia objetiva de redução de custos e estudos de eficiência de gastos?",
+        "pillar": "Financeiro"
     },
     {
         "id": 10,
-        "content": "Você possui segurança para a gestão de caixa do seu negócio para os próximos 6 meses?"
+        "content": "Você possui segurança para a gestão de caixa do seu negócio para os próximos 6 meses?",
+        "pillar": "Financeiro"
     },
     {
         "id": 11,
-        "content": "Sua equipe de vendas possui técnicas claras de prospecção de novos clientes, garantindo assim o crescimento da Carteira?"
+        "content": "Sua equipe de vendas possui técnicas claras de prospecção de novos clientes, garantindo assim o crescimento da Carteira?",
+        "pillar": "Comercial / Vendas"
     },
     {
         "id": 12,
-        "content": "Você possui um acompanhamento sistemático e mensal dos resultados individuais de cada vendedor, fornecendo feedbacks e acompanhando sua melhoria?"
+        "content": "Você possui um acompanhamento sistemático e mensal dos resultados individuais de cada vendedor, fornecendo feedbacks e acompanhando sua melhoria?",
+        "pillar": "Comercial / Vendas"
     },
     {
         "id": 13,
-        "content": "Seus vendedores são treinados para utilizarem Técnicas de Negociação que garantem os melhores resultados possíveis para sua atividade comercial?"
+        "content": "Seus vendedores são treinados para utilizarem Técnicas de Negociação que garantem os melhores resultados possíveis para sua atividade comercial?",
+        "pillar": "Comercial / Vendas"
     },
     {
         "id": 14,
-        "content": "No início do ano você realizou juntamente com seus gestores um Planejamento Comercial, onde foram definidos os Objetivos Comerciais (Faturamento Anual, Tamanho da Equipe de Vendas, Áreas de Atuação, Mix de Produtos) da Empresa?"
+        "content": "No início do ano você realizou juntamente com seus gestores um Planejamento Comercial, onde foram definidos os Objetivos Comerciais (Faturamento Anual, Tamanho da Equipe de Vendas, Áreas de Atuação, Mix de Produtos) da Empresa?",
+        "pillar": "Comercial / Vendas"
     },
     {
         "id": 15,
-        "content": "Seu modelo de Comissionamento de Vendas estimula os vendedores ao mesmo tempo que propicia o crescimento sustentável da empresa?"
+        "content": "Seu modelo de Comissionamento de Vendas estimula os vendedores ao mesmo tempo que propicia o crescimento sustentável da empresa?",
+        "pillar": "Comercial / Vendas"
     },
     {
         "id": 16,
-        "content": "Você possui uma equipe verdadeiramente alinhada e engajada com sua cultura e com sua empresa, gerando um excelente clima para se trabalhar?"
+        "content": "Você possui uma equipe verdadeiramente alinhada e engajada com sua cultura e com sua empresa, gerando um excelente clima para se trabalhar?",
+        "pillar": "Liderança e Gestão de Pessoas"
     },
     {
         "id": 17,
-        "content": "Você tem processos e programas claros de atração e retenção de talentos? "
+        "content": "Você tem processos e programas claros de atração e retenção de talentos?",
+        "pillar": "Liderança e Gestão de Pessoas"
     },
     {
         "id": 18,
-        "content": "Sua empresa possui um Plano de Cargos e Carreira, conhecido por todos os colaboradores, que propicia transparência sobre requisitos necessários para trilhar uma carreira dentro da empresa?"
+        "content": "Sua empresa possui um Plano de Cargos e Carreira, conhecido por todos os colaboradores, que propicia transparência sobre requisitos necessários para trilhar uma carreira dentro da empresa?",
+        "pillar": "Liderança e Gestão de Pessoas"
     },
     {
         "id": 19,
-        "content": "Os líderes da sua empresa inspiram confiança e empenho na equipe por meio de um comportamento profissional exemplar, batendo constantemente as metas que lhe são atribuídas?"
+        "content": "Os líderes da sua empresa inspiram confiança e empenho na equipe por meio de um comportamento profissional exemplar, batendo constantemente as metas que lhe são atribuídas?",
+        "pillar": "Liderança e Gestão de Pessoas"
     },
     {
         "id": 20,
-        "content": "Sua empresa possui uma sistemática periódica de feedbacks utilizando indicadores de desempenhos objetivos de forma que os líderes possam agir de forma meritocrática e justa?"
+        "content": "Sua empresa possui uma sistemática periódica de feedbacks utilizando indicadores de desempenhos objetivos de forma que os líderes possam agir de forma meritocrática e justa?",
+        "pillar": "Liderança e Gestão de Pessoas"
     }
 ]

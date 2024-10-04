@@ -1,4 +1,3 @@
-// src/app/api/users/[id]/answers/route.ts
 import { getAnswersByUserIdHandler, saveAnswersHandler } from '@/controllers/maturidade-gestao/user.controller';
 import { NextRequest } from 'next/server';
 

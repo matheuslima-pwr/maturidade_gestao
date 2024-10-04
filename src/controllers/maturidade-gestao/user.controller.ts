@@ -1,9 +1,38 @@
 import { UserDto } from '@/@types/user';
-import { getAnswersByUserId, getZoneByUser, saveUser, saveUserAnswers } from '@/services/maturidade-gestao/user.service';
+import { getAnswersByUserId, getAverageAnswersByUserId, getUsers, getUsersAverageAnswers, getZoneByUser, saveUser, saveUserAnswers } from '@/services/maturidade-gestao/user.service';
 import { NextResponse } from 'next/server';
 import { SignJWT } from 'jose';
 
 // controllers/answerController.ts
+
+export async function getUsersHandler() {
+    try {
+        // Chama o serviço para buscar os usuários
+        const users = await getUsers();
+        return NextResponse.json(users, { status: 200 }); // OK
+    } catch (error) {
+        return NextResponse.json({ error: 'Erro ao buscar usuários' }, { status: 500 }); // Internal Server Error
+    }
+}
+
+export async function getUsersAverageAnswersHandler() {
+    // Chama o serviço para buscar as respostas
+    const result = await getUsersAverageAnswers();
+
+    // Cria a resposta com o status e o cookie
+    const response = NextResponse.json(result, { status: 200 }); // OK
+    return response;
+}
+
+export async function getAverageAnswersByUserIdHandler(userId: string) {
+    try {
+        // Chama o serviço para buscar as respostas
+        const answers = await getAverageAnswersByUserId(userId);
+        return NextResponse.json(answers, { status: 200 }); // OK
+    } catch (error) {
+        return NextResponse.json({ error: 'Erro ao buscar respostas' }, { status: 500 }); // Internal Server Error
+    }
+}
 
 export async function getAnswersByUserIdHandler(userId: string) {
     try {

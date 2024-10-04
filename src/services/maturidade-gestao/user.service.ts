@@ -3,6 +3,67 @@ import { UserDto } from "@/@types/user";
 
 const prisma = new PrismaClient();
 
+export async function getUsers() {
+    try {
+        // Buscar os usuários no banco de dados
+        const users = await prisma.userMaturidadeGestao.findMany();
+        return users;
+    } catch (error) {
+        console.error('Erro ao buscar usuários:', error);
+        throw new Error('Erro ao buscar usuários');
+    }
+}
+
+export async function getUsersAverageAnswers() {
+    try {
+        // Buscar as respostas dos usuários
+        const averageAnswers = await prisma.$queryRaw`
+            SELECT
+            CASE
+                WHEN pergunta_id BETWEEN 1 AND 5 THEN 'Estrategia e Gestao'
+                WHEN pergunta_id BETWEEN 6 AND 10 THEN 'Financeiro'
+                WHEN pergunta_id BETWEEN 11 AND 15 THEN 'Comercial / Vendas'
+                WHEN pergunta_id BETWEEN 16 AND 20 THEN 'Liderança e Gestão de Pessoas'
+            END AS grupo,
+            AVG(CASE WHEN resposta = 'yes' THEN 1 ELSE 0 END) AS media
+            FROM
+            maturidade_gestao.respostas r 
+            GROUP BY
+            grupo;
+        `;
+        return averageAnswers;
+    } catch (error) {
+        console.error('Erro ao buscar média das respostas:', error);
+        throw new Error('Erro ao buscar média das respostas');
+    }
+}
+
+export async function getAverageAnswersByUserId(userId: string) {
+    try {
+        // Buscar as respostas do usuário no banco de dados
+        const averageAnswers = await prisma.$queryRaw`
+            SELECT
+            CASE
+                WHEN pergunta_id BETWEEN 1 AND 5 THEN 'Estrategia e Gestao'
+                WHEN pergunta_id BETWEEN 6 AND 10 THEN 'Financeiro'
+                WHEN pergunta_id BETWEEN 11 AND 15 THEN 'Comercial / Vendas'
+                WHEN pergunta_id BETWEEN 16 AND 20 THEN 'Liderança e Gestão de Pessoas'
+            END AS grupo,
+            AVG(CASE WHEN resposta = 'yes' THEN 1 ELSE 0 END) AS media
+            FROM
+            maturidade_gestao.respostas r 
+            WHERE
+            usuario_id = ${userId}
+            GROUP BY
+            grupo;
+        `;
+        return averageAnswers;
+    } catch (error) {
+        console.error('Erro ao buscar média das respostas do usuário:', error);
+        throw new Error('Erro ao buscar média das respostas do usuário');
+    }
+}
+
 export async function saveUser(body: UserDto) {
     try {
         // Salvar o usuário no banco de dados
@@ -54,10 +115,10 @@ export async function getZoneByUser(userId: string) {
             }
         });
 
-        if(answers.length === 0) {
+        if (answers.length === 0) {
             throw new Error('Usuário não possui respostas');
         }
-        
+
         const zone = answers.reduce((acc, answer) => {
             if (answer.resposta === 'yes') {
                 acc++;
@@ -78,7 +139,7 @@ export async function saveUserAnswers(userId: string, answers: { questionId: num
         if (!answers || answers.length === 0) {
             throw new Error('Nenhuma resposta fornecida.');
         }
-        
+
         const savedAnswers = await prisma.answerMaturidadeGestao.createMany({
             data: answers.map(answer => ({
                 usuario_id: userId,

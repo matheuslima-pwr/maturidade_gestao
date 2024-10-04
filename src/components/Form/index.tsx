@@ -7,6 +7,15 @@ import { UserDto } from "@/@types/user";
 import styles from '@/app/styles/input.module.css';
 import Swal from 'sweetalert2'
 
+type User = {
+    email: string;
+    nome: string;
+    empresa: string;
+    segmento: string;
+    telefone: string;
+    faturamento: string;
+}
+
 export default function Form() {
     const formRef = useRef<HTMLFormElement>(null);
     const lastYear = new Date().getFullYear() - 1;
@@ -46,10 +55,9 @@ export default function Form() {
 
             try {
                 const form = formRef.current;
-                const body: UserDto = {
+                const body: User = {
                     email: form?.email.value,
                     nome: form?.nome.value,
-                    cargo: form?.cargo.value,
                     empresa: form?.empresa.value,
                     segmento: form?.segmento.value,
                     telefone: form?.telefone.value,
@@ -60,6 +68,7 @@ export default function Form() {
                 Swal.close();
                 router.push(`/maturidade-gestao/${userId}/diagnostico`);    
             } catch (error) {
+                console.log(error)
                 Swal.fire({
                     title: `Erro`,
                     text: 'Ocorreu um erro ao cadastrar seus dados. Tente novamente mais tarde.',
