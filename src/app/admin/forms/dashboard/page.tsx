@@ -52,9 +52,6 @@ const chartConfig = {
 
 import questions from "@/data/questions.json";
 import { AnswerMaturidadeGestao, UserMaturidadeGestao } from "@prisma/client";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import Loading from "@/components/loading";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Dashboard() {
@@ -65,9 +62,7 @@ export default function Dashboard() {
     const [averageAnswers, setAverageAnswers] = useState<{ grupo: string, media: number }[]>([]);
     const [userAvgAnswers, setUserAvgAnswers] = useState<{ grupo: string, media: string }[]>([]);
     const [loading, setLoading] = useState(false);
-    const { status } = useSession();
-    const router = useRouter();
-
+    
     // Filter emails based on search query
     const filteredEmails = leads.map((lead) => lead.email).filter((email) => email.includes(searchQuery));
 
@@ -87,12 +82,7 @@ export default function Dashboard() {
             }
         }
         fetchLeads();
-        if (status === 'authenticated') {
-            fetchLeads();
-        } else {
-            router.push('/admin')
-        }
-    }, [status, router]);
+    }, []);
 
     useEffect(() => {
         const fetchAnswers = async () => {
@@ -165,8 +155,6 @@ export default function Dashboard() {
         )
     }
 
-    if (status === 'loading') return <Loading />
-
     return (
         <div className=" flex-1 flex w-full flex-col bg-muted/50">
             <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
@@ -226,9 +214,9 @@ export default function Dashboard() {
                                                 </TableCell>
                                                 <TableCell className="hidden sm:table-cell">
                                                     {loading ? <Skeleton className="w-10 h-6" /> :
-                                                    answers[index] ?
-                                                        <Badge color='#ff5b00'>{answers[index]?.resposta === "yes" ? "Sim" : "Não"}</Badge> :
-                                                        <></>
+                                                        answers[index] ?
+                                                            <Badge color='#ff5b00'>{answers[index]?.resposta === "yes" ? "Sim" : "Não"}</Badge> :
+                                                            <></>
                                                     }
                                                 </TableCell>
                                             </TableRow>

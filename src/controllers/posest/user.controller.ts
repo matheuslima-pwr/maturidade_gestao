@@ -2,7 +2,6 @@ import { findAll } from "@/services/posest/user.service";
 import { NextResponse } from "next/server";
 
 type User = {
-    id: number;
     email: string;
     nome: string;
     telefone: string;
