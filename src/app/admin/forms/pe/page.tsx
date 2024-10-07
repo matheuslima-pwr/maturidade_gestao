@@ -55,7 +55,7 @@ type Data = {
   produto: string
 }
 
-export const columns: ColumnDef<Data>[] = [
+const columns: ColumnDef<Data>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -224,7 +224,7 @@ export default function DataVisualizationPage() {
       })
       return
     }
-    
+
     Swal.fire({
       title: 'Exportar dados',
       text: 'Deseja exportar os dados para um arquivo CSV?',
@@ -237,8 +237,6 @@ export default function DataVisualizationPage() {
         exportCSV()
       }
     })
-    
-    
   }
 
   return (

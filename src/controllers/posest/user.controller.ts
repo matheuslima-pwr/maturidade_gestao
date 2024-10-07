@@ -1,4 +1,4 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]";
 import { findAll } from "@/services/posest/user.service";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";

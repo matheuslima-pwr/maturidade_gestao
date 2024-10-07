@@ -3,7 +3,7 @@ import { getAnswersByUserId, getAverageAnswersByUserId, getUsers, getUsersAverag
 import { NextResponse } from 'next/server';
 import { SignJWT } from 'jose';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/app/api/auth/[...nextauth]';
 
 // controllers/answerController.ts
 
