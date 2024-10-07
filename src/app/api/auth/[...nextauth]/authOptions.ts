@@ -24,9 +24,10 @@ export const authOptions: AuthOptions = {
                 const adminUsername = process.env.ADMIN_USERNAME;
                 const adminPasswordHash = process.env.ADMIN_PASSWORD_HASH;
                 console.log(adminPasswordHash);
+
                 if (
                     credentials?.username === adminUsername &&
-                    await bcrypt.compare(credentials?.password!, adminPasswordHash!)
+                    await bcrypt.compare(credentials?.password ?? '', adminPasswordHash ?? '')
                 ) {
                     return user; // Retorne o usuário se as credenciais estiverem corretas
                 }
