@@ -91,6 +91,7 @@ export default function Dashboard() {
         const fetchAnswers = async () => {
             try {
                 setLoading(true);
+                if(!selectedUser) return;
                 const response = await api.get(`/api/matges/users/${selectedUser?.id}/answers`);
                 const res = await api.get(`/api/matges/users/${selectedUser?.id}/answers/average`);
                 setAnswers(response.data);
