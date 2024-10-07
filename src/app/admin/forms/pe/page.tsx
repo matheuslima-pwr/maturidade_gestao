@@ -40,6 +40,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { useRouter } from "next/navigation"
+import Swal from "sweetalert2"
 
 type Data = {
   id: string
@@ -160,7 +161,7 @@ export default function DataVisualizationPage() {
     initialState: {
       pagination: {
         pageIndex: 0,
-        pageSize: 50
+        pageSize: 100
       }
     },
     state: {
@@ -194,7 +195,7 @@ export default function DataVisualizationPage() {
     setRowSelection({})
   }
 
-  const handleExportCSV = () => {
+  const exportCSV = () => {
     const headers = ["id", "nome", "email", "empresa", "segmento", "telefone", "faturamento", "operacional", "cliente", "produto"]
     const csvContent = [
       headers.join(","),
@@ -212,6 +213,32 @@ export default function DataVisualizationPage() {
       link.click()
       document.body.removeChild(link)
     }
+  }
+
+  const handleExportCSV = () => {
+    if(selectedRows.length === 0) {
+      Swal.fire({
+        title: 'Nenhum dado selecionado',
+        text: 'Por favor, selecione os dados que deseja exportar',
+        icon: 'warning'
+      })
+      return
+    }
+    
+    Swal.fire({
+      title: 'Exportar dados',
+      text: 'Deseja exportar os dados para um arquivo CSV?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Exportar',
+      cancelButtonText: 'Cancelar'
+    }).then(result => {
+      if (result.isConfirmed) {
+        exportCSV()
+      }
+    })
+    
+    
   }
 
   return (
@@ -359,16 +386,16 @@ export default function DataVisualizationPage() {
           </Button>
         </div>
         <Select
-          defaultValue="50"
+          defaultValue="100"
           value={table.getState().pagination.pageSize.toString()}
           onValueChange={(value) => table.setPageSize(Number(value))}>
           <SelectTrigger className="w-[180px] bg-[#171717] text-white">
             <SelectValue placeholder="Items per page" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="50">50 per page</SelectItem>
             <SelectItem value="100">100 per page</SelectItem>
             <SelectItem value="500">500 per page</SelectItem>
+            <SelectItem value="1000">1000 per page</SelectItem>
           </SelectContent>
         </Select>
       </div>
