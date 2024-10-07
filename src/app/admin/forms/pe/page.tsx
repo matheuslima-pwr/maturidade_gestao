@@ -281,7 +281,7 @@ export default function DataVisualizationPage() {
         </DropdownMenu>
       </div>
 
-      <Card className="mb-6 max-h-[650px] overflow-scroll">
+      <Card className="mb-6 max-h-[650px] overflow-y-auto">
         <CardHeader>
           <CardTitle>Posicionamento Estratégico</CardTitle>
         </CardHeader>
