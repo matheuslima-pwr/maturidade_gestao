@@ -41,6 +41,7 @@ export async function getUsersAverageAnswers() {
 export async function getAverageAnswersByUserId(userId: string) {
     try {
         // Buscar as respostas do usuário no banco de dados
+        console.log(userId)
         const averageAnswers = await prisma.$queryRaw`
             SELECT
             CASE
@@ -52,8 +53,7 @@ export async function getAverageAnswersByUserId(userId: string) {
             AVG(CASE WHEN resposta = 'yes' THEN 1 ELSE 0 END) AS media
             FROM
             maturidade_gestao.respostas r 
-            WHERE
-            usuario_id = ${userId}
+            WHERE usuario_id = ${userId}::UUID
             GROUP BY
             grupo;
         `;
