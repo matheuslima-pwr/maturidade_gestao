@@ -2,10 +2,17 @@ import { UserDto } from '@/@types/user';
 import { getAnswersByUserId, getAverageAnswersByUserId, getUsers, getUsersAverageAnswers, getZoneByUser, saveUser, saveUserAnswers } from '@/services/maturidade-gestao/user.service';
 import { NextResponse } from 'next/server';
 import { SignJWT } from 'jose';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 // controllers/answerController.ts
 
 export async function getUsersHandler() {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 }); // Unauthorized
+    }
+
     try {
         // Chama o serviço para buscar os usuários
         const users = await getUsers();
@@ -16,6 +23,10 @@ export async function getUsersHandler() {
 }
 
 export async function getUsersAverageAnswersHandler() {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 }); // Unauthorized
+    }
     // Chama o serviço para buscar as respostas
     const result = await getUsersAverageAnswers();
 
@@ -25,6 +36,11 @@ export async function getUsersAverageAnswersHandler() {
 }
 
 export async function getAverageAnswersByUserIdHandler(userId: string) {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 }); // Unauthorized
+    }
+    
     try {
         // Chama o serviço para buscar as respostas
         const answers = await getAverageAnswersByUserId(userId);

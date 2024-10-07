@@ -2,26 +2,33 @@
 
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
+import { signOut } from 'next-auth/react';
 
 export default function AdminHome() {
   const router = useRouter()
 
+  const logout = async () => {
+    await signOut()
+    router.replace('/admin')
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background">
-      <h1 className="text-4xl font-bold mb-8 text-foreground">Bem vindo a seleção de formulário</h1>
-      <div className="space-y-4">
+    <div className="flex flex-col my-auto items-center justify-center bg-background">
+      <h1 className="text-4xl font-bold mb-8 text-foreground">Painel de Administração</h1>
+      <div className="space-y-4 w-[300px] flex flex-col items-center">
         <Button 
-          onClick={() => router.push('/admin/forms/posest')}
+          onClick={() => router.push('/admin/forms/pe')}
           className="w-full"
         >
             Posicionamento Estratégico
         </Button>
         <Button 
-          onClick={() => router.push('/admin/forms/dashboard')}
+          onClick={() => router.push('/admin/forms/mg')}
           className="w-full"
         >
             Maturidade em Gestão
         </Button>
+        <Button variant={'outline'} className="w-48 bg-[#004477] text-white hover:bg-[#004477]/90 hover:text-white" onClick={logout}>Sair</Button>
       </div>
     </div>
   )

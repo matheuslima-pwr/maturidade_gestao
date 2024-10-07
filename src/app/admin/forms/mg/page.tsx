@@ -53,6 +53,8 @@ const chartConfig = {
 import questions from "@/data/questions.json";
 import { AnswerMaturidadeGestao, UserMaturidadeGestao } from "@prisma/client";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useRouter } from "next/navigation";
+import { Undo2 } from "lucide-react";
 
 export default function Dashboard() {
     const [searchQuery, setSearchQuery] = useState("");
@@ -62,7 +64,8 @@ export default function Dashboard() {
     const [averageAnswers, setAverageAnswers] = useState<{ grupo: string, media: number }[]>([]);
     const [userAvgAnswers, setUserAvgAnswers] = useState<{ grupo: string, media: string }[]>([]);
     const [loading, setLoading] = useState(false);
-    
+    const router = useRouter();
+
     // Filter emails based on search query
     const filteredEmails = leads.map((lead) => lead.email).filter((email) => email.includes(searchQuery));
 
@@ -138,11 +141,11 @@ export default function Dashboard() {
         }
     ];
 
-    const CustomLegend = (props: { payload: any; }) => {
+    const CustomLegend = (props: { payload: { color: string; payload: { dataKey: string; }; }[] }) => {
         const { payload } = props
         return (
             <ul className="flex justify-center space-x-4 mt-4">
-                {payload.map((entry: { color: any; payload: { dataKey: string; }; }, index: any) => (
+                {payload.map((entry, index) => (
                     <li key={`item-${index}`} className="flex items-center">
                         <span
                             className="w-3 h-3 mr-2"
@@ -158,6 +161,10 @@ export default function Dashboard() {
     return (
         <div className=" flex-1 flex w-full flex-col bg-muted/50">
             <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+                <Button onClick={() => router.push('/admin/forms')} className="mx-6 flex items-center w-min gap-2 bg-[#004477] text-white">
+                    <Undo2 size={20} />
+                    Voltar para seleção
+                </Button>
                 <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
                     <div className="grid auto-rows-max items-start gap-4 md:gap-4 lg:col-span-2">
                         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-5 xl:grid-cols-5">
@@ -284,7 +291,7 @@ export default function Dashboard() {
                                                 <PolarRadiusAxis angle={0} domain={[0, 100]} tick={{ fill: 'hsl(var(--foreground))', fontSize: 10 }} />
                                                 <Radar name="Media" dataKey="Media" stroke="hsl(var(--primary))" fill={chartConfig.Media.color} fillOpacity={0.4} />
                                                 <Radar name="Resposta" dataKey="Resposta" stroke="hsl(var(--secondary))" fill={chartConfig.Resposta.color} fillOpacity={0.6} />
-                                                <Legend content={<CustomLegend payload={undefined} />} />
+                                                <Legend content={<CustomLegend payload={[]} />} />
                                             </RadarChart>
                                         </ResponsiveContainer>
                                     </div>

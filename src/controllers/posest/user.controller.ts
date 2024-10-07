@@ -1,4 +1,6 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { findAll } from "@/services/posest/user.service";
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
 type User = {
@@ -18,6 +20,11 @@ type User = {
 }
 
 export async function getUsers() {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 }); // Unauthorized
+    }
+    
     try {
         const users: User[] = await findAll();
         return NextResponse.json(users, { status: 200 }); // OK

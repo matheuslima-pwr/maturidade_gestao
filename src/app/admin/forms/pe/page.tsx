@@ -39,7 +39,7 @@ import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
-import Loading from "@/components/loading"
+import { useRouter } from "next/navigation"
 
 type Data = {
   id: string
@@ -140,6 +140,7 @@ export default function DataVisualizationPage() {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
   )
+  const router = useRouter()
 
   const [columnVisibility, setColumnVisibility] =
     useState<VisibilityState>({})
@@ -216,6 +217,11 @@ export default function DataVisualizationPage() {
   return (
     <div className="container mx-auto py-8">
       <div className="flex flex-col md:flex-row gap-4 mb-6">
+        <Button onClick={() => router.push('/admin/forms')} className="flex items-center w-min gap-2 bg-[#004477] text-white">
+          <Undo2 size={20} />
+          Voltar para seleção
+        </Button>
+
         <Input
           placeholder="Filter names..."
           value={(table.getColumn("nome")?.getFilterValue() as string) ?? ""}

@@ -1,26 +1,20 @@
 'use client';
-import { signIn, useSession } from "next-auth/react";
-import { useEffect } from "react";
+import Loading from "@/components/loading";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 export default function AdminLoginLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const { data: session, status } = useSession();
-    useEffect(() => {
-        console.log('Session:', session);
-        console.log('Status:', status);
-    
-        if (status === "loading") return; // Enquanto a sessão está carregando
-        if (!session) {
-          signIn(); // Redireciona para a página de login se não estiver autenticado
-        }
-      }, [session, status]);
+    const { status } = useSession();
 
     return (
         <>
-            { children }
+            {status === 'unauthenticated' && redirect('/admin')}
+            {status === 'loading' && <Loading />}
+            {status === 'authenticated' && children}
         </>
     );
 }
