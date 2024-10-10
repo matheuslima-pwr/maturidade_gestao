@@ -41,6 +41,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { useRouter } from "next/navigation"
 import Swal from "sweetalert2"
+import { formatDateTime } from "@/lib/utils"
 
 type Data = {
   id: string
@@ -77,6 +78,25 @@ const columns: ColumnDef<Data>[] = [
     ),
     enableSorting: false,
     enableHiding: false,
+  },
+  {
+    accessorKey: "created_at",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Data de Cadastro
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => {
+      return (
+        <div className="text-center font-medium">{formatDateTime(row.getValue("created_at"))}</div>
+      )
+    } 
   },
   {
     accessorKey: "nome",
@@ -178,6 +198,7 @@ export default function DataVisualizationPage() {
     const fetchData = async () => {
       try {
         const response = await api.get("/api/posest/users")
+        console.log("Data fetched:", response.data)
         setData(response.data)
       } catch (error) {
         console.error("Error fetching data:", error)

@@ -5,8 +5,6 @@ import { SignJWT } from 'jose';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/authOptions';
 
-// controllers/answerController.ts
-
 export async function getUsersHandler() {
     const session = await getServerSession(authOptions);
     if (!session) {

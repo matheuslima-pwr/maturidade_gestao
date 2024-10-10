@@ -6,6 +6,7 @@ export async function findAll() {
   try {
     const result = await prisma.userPosEst.findMany({
       select: {
+        created_at: true,
         email: true,
         nome: true,
         telefone: true,
