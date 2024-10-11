@@ -45,6 +45,7 @@ import { formatDateTime } from "@/lib/utils"
 
 type Data = {
   id: string
+  created_at: string
   nome: string
   email: string
   empresa: string
@@ -217,7 +218,7 @@ export default function DataVisualizationPage() {
   }
 
   const exportCSV = () => {
-    const headers = ["id", "nome", "email", "empresa", "segmento", "telefone", "faturamento", "operacional", "cliente", "produto"]
+    const headers = ["created_at", "nome", "email", "empresa", "segmento", "telefone", "faturamento", "operacional", "cliente", "produto"]
     const csvContent = [
       headers.join(","),
       ...selectedRows.map(row => headers.map(header => row[header as keyof typeof row]).join(","))
