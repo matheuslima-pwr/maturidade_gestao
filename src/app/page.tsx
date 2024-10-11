@@ -2,7 +2,6 @@
 
 import api from "@/app/api";
 import { useRef } from "react";
-import { useRouter } from "next/navigation";
 import { UserDto } from "@/@types/user";
 import styles from '@/app/styles/input.module.css';
 import Swal from 'sweetalert2'
@@ -10,7 +9,6 @@ import Swal from 'sweetalert2'
 export default function Home() {
   const formRef = useRef<HTMLFormElement>(null);
   const lastYear = new Date().getFullYear() - 1;
-  const router = useRouter();
 
   const submitInfo = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

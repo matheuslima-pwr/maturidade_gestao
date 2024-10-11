@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@iconify-icon/react": "^2.1.0",
     "@iconify/react": "^5.0.2",
     "@prisma/client": "^5.20.0",
     "@radix-ui/react-alert-dialog": "^1.1.1",
