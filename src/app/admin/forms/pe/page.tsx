@@ -57,6 +57,8 @@ type Data = {
   produto: string
 }
 
+import { utils, writeFile } from 'xlsx';
+
 const columns: ColumnDef<Data>[] = [
   {
     id: "select",
@@ -97,7 +99,7 @@ const columns: ColumnDef<Data>[] = [
       return (
         <div className="text-center font-medium">{formatDateTime(row.getValue("created_at"))}</div>
       )
-    } 
+    }
   },
   {
     accessorKey: "nome",
@@ -217,49 +219,94 @@ export default function DataVisualizationPage() {
     setRowSelection({})
   }
 
-  const exportCSV = () => {
-    const headers = ["created_at", "nome", "email", "empresa", "segmento", "telefone", "faturamento", "operacional", "cliente", "produto"]
-    const csvContent = [
-      headers.join(","),
-      ...selectedRows.map(row => headers.map(header => row[header as keyof typeof row]).join(","))
-    ].join("\n")
+  const exportExcel = () => {
+    const headers = ["criado_em", "nome", "email", "empresa", "segmento", "telefone", "faturamento", "operacional", "cliente", "produto"];
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
-    const link = document.createElement("a")
-    if (link.download !== undefined) {
-      const url = URL.createObjectURL(blob)
-      link.setAttribute("href", url)
-      link.setAttribute("download", "leads_data.csv")
-      link.style.visibility = 'hidden'
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-    }
-  }
+    const excelData = selectedRows.map(row =>
+      headers.map(header => {
+        if (header === "criado_em") {
+          return formatDateTime(row["created_at"]);
+        }
+        return row[header as keyof typeof row] || "";
+      })
+    );
 
-  const handleExportCSV = () => {
-    if(selectedRows.length === 0) {
+    const dataWithHeaders = [headers, ...excelData];
+
+    const worksheet = utils.aoa_to_sheet(dataWithHeaders); // `aoa_to_sheet` para Arrays de Arrays
+
+    const workbook = utils.book_new();
+    utils.book_append_sheet(workbook, worksheet, 'Leads Data');
+    writeFile(workbook, 'leads_data.xlsx');
+  };
+
+  const handleExportExcel = () => {
+    if (selectedRows.length === 0) {
       Swal.fire({
         title: 'Nenhum dado selecionado',
         text: 'Por favor, selecione os dados que deseja exportar',
         icon: 'warning'
-      })
-      return
+      });
+      return;
     }
 
     Swal.fire({
       title: 'Exportar dados',
-      text: 'Deseja exportar os dados para um arquivo CSV?',
+      text: 'Deseja exportar os dados para um arquivo Excel?',
       icon: 'question',
       showCancelButton: true,
       confirmButtonText: 'Exportar',
       cancelButtonText: 'Cancelar'
     }).then(result => {
       if (result.isConfirmed) {
-        exportCSV()
+        exportExcel();
       }
-    })
-  }
+    });
+  };
+
+  // const exportCSV = () => {
+  //   const headers = ["created_at", "nome", "email", "empresa", "segmento", "telefone", "faturamento", "operacional", "cliente", "produto"]
+  //   const csvContent = [
+  //     headers.join(","),
+  //     ...selectedRows.map(row => headers.map(header => row[header as keyof typeof row]).join(","))
+  //   ].join("\n")
+
+  //   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+  //   const link = document.createElement("a")
+  //   if (link.download !== undefined) {
+  //     const url = URL.createObjectURL(blob)
+  //     link.setAttribute("href", url)
+  //     link.setAttribute("download", "leads_data.csv")
+  //     link.style.visibility = 'hidden'
+  //     document.body.appendChild(link)
+  //     link.click()
+  //     document.body.removeChild(link)
+  //   }
+  // }
+
+  // const handleExportCSV = () => {
+  //   if (selectedRows.length === 0) {
+  //     Swal.fire({
+  //       title: 'Nenhum dado selecionado',
+  //       text: 'Por favor, selecione os dados que deseja exportar',
+  //       icon: 'warning'
+  //     })
+  //     return
+  //   }
+
+  //   Swal.fire({
+  //     title: 'Exportar dados',
+  //     text: 'Deseja exportar os dados para um arquivo CSV?',
+  //     icon: 'question',
+  //     showCancelButton: true,
+  //     confirmButtonText: 'Exportar',
+  //     cancelButtonText: 'Cancelar'
+  //   }).then(result => {
+  //     if (result.isConfirmed) {
+  //       exportCSV()
+  //     }
+  //   })
+  // }
 
   return (
     <div className="container mx-auto py-8">
@@ -277,8 +324,8 @@ export default function DataVisualizationPage() {
           }
           className="max-w-sm bg-white border border-[#a3a3a3]"
         />
-        <Button onClick={handleExportCSV} className="w-full md:w-auto">
-          <Download className="mr-2 h-4 w-4" /> Export to CSV
+        <Button onClick={handleExportExcel} className="w-full md:w-auto">
+          <Download className="mr-2 h-4 w-4" /> Export to Excel
         </Button>
         <AlertDialog>
           <AlertDialogTrigger asChild>
