@@ -18,13 +18,13 @@ export default function AdminHome() {
       <div className="space-y-4 w-[300px] flex flex-col items-center">
         <Button 
           onClick={() => router.push('/admin/forms/pe')}
-          className="w-full"
+          className="w-full bg-black text-white hover:bg-black/90 hover:text-white"
         >
             Posicionamento Estratégico
         </Button>
         <Button 
           onClick={() => router.push('/admin/forms/mg')}
-          className="w-full"
+          className="w-full bg-black text-white hover:bg-black/90 hover:text-white"
         >
             Maturidade em Gestão
         </Button>

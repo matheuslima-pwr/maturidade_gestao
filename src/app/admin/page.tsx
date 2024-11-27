@@ -63,7 +63,7 @@ export default function AdminLogin() {
                 required
               />
             </div>
-            <Button className="w-full">Sign in</Button>
+            <Button className="w-full bg-black text-white hover:bg-black/80 hover:text-white">Sign in</Button>
           </form>
         </CardContent>
       </Card>

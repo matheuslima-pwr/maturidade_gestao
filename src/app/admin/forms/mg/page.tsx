@@ -159,7 +159,7 @@ export default function Dashboard() {
     }
 
     return (
-        <div className=" flex-1 flex w-full flex-col bg-muted/50">
+        <div className=" flex-1 flex w-full flex-col bg-background">
             <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
                 <Button onClick={() => router.push('/admin/forms')} className="mx-6 flex items-center w-min gap-2 bg-[#004477] text-white">
                     <Undo2 size={20} />
@@ -191,12 +191,12 @@ export default function Dashboard() {
                         </div>
                         <Card x-chunk="A table of answers from test." className="max-h-[600px] overflow-y-scroll">
                             <CardHeader className="px-7">
-                                <CardTitle>Tabela das Respotas: {selectedUser?.nome}</CardTitle>
+                                <CardTitle className="text-black">Tabela das Respotas: {selectedUser?.nome}</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <Table>
                                     <TableHeader>
-                                        <TableRow>
+                                        <TableRow className="hover:bg-[#cacaca]">
                                             <TableHead>Pergunta</TableHead>
                                             <TableHead className="hidden sm:table-cell">
                                                 Pilar
@@ -208,11 +208,11 @@ export default function Dashboard() {
                                     </TableHeader>
                                     <TableBody>
                                         {questions.map((_, index) => (
-                                            <TableRow key={index}>
+                                            <TableRow key={index} className="hover:bg-[#cacaca]">
                                                 <TableCell>
                                                     <div className="flex items-center gap-2 max-w-[500px]">
                                                         <div className="flex flex-col">
-                                                            <div className="text-sm text-primary">{questions[index]?.content}</div>
+                                                            <div className="text-sm text-foreground">{questions[index]?.content}</div>
                                                         </div>
                                                     </div>
                                                 </TableCell>
@@ -222,7 +222,7 @@ export default function Dashboard() {
                                                 <TableCell className="hidden sm:table-cell">
                                                     {loading ? <Skeleton className="w-10 h-6" /> :
                                                         answers[index] ?
-                                                            <Badge color='#ff5b00'>{answers[index]?.resposta === "yes" ? "Sim" : "Não"}</Badge> :
+                                                            <Badge className="bg-black/80 text-white">{answers[index]?.resposta === "yes" ? "Sim" : "Não"}</Badge> :
                                                             <></>
                                                     }
                                                 </TableCell>
@@ -243,7 +243,7 @@ export default function Dashboard() {
                             <CardContent>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                        <Button className="flex items-center gap-2">
+                                        <Button className="flex items-center gap-2 bg-black text-white hover:bg-black/80 hover:text-white">
                                             Filtro
                                         </Button>
                                     </DropdownMenuTrigger>
