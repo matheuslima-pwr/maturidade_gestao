@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1,
+        "content": "Sua empresa realiza um planejamento estratégico anual?",
+        "pillar": "Estratégia e Gestão"
+    },
+    {
+        "id": 2,
+        "content": "Sua empresa possui um Demonstrativo de Resultados do Exercício (DRE) estruturado?",
+        "pillar": "Financeiro"
+    },
+    {
+        "id": 3,
+        "content": "Sua empresa realiza e acompanha o controle do fluxo de caixa mensalmente?",
+        "pillar": "Financeiro"
+    },
+    {
+        "id": 4,
+        "content": "Sua empresa possui uma estratégia comercial bem definida?",
+        "pillar": "Comercial / Vendas"
+    },
+    {
+        "id": 5,
+        "content": "Sua empresa realiza a conciliação bancária regularmente?",
+        "pillar": "Financeiro"
+    },
+    {
+        "id": 6,
+        "content": "Sua empresa possui Padrão de Atendimento documentado e atualizado regularmente?",
+        "pillar": "Comercial / Vendas"
+    },
+    {
+        "id": 7,
+        "content": "Sua empresa fornece treinamentos e capacitação de forma contínua para sua equipe?",
+        "pillar": "Financeiro"
+    }
+]

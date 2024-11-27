@@ -16,7 +16,7 @@ type User = {
     faturamento: string;
 }
 
-export default function Form() {
+export default function Form({ title, route, type }: { title: string, route: string, type: string }) {
     const formRef = useRef<HTMLFormElement>(null);
     const lastYear = new Date().getFullYear() - 1;
     const router = useRouter();
@@ -63,10 +63,10 @@ export default function Form() {
                     telefone: form?.telefone.value,
                     faturamento: form?.faturamento.value
                 }
-                const res = await api.post('/api/matges/users', body);
+                const res = await api.post(route, body);
                 const userId = res.data.userId;
                 Swal.close();
-                router.push(`/maturidade-gestao/${userId}/diagnostico`);    
+                router.push(`/maturidade-${type}/${userId}/diagnostico`);    
             } catch (error) {
                 console.log(error)
                 Swal.fire({
@@ -108,7 +108,7 @@ export default function Form() {
     return (
         <div className="w-full max-w-[650px] mx-auto mt-8 sm:mt-8 md:mt-12 lg:mt-12 shadow-md shadow-form-shadow rounded-2xl py-8 px-4 sm:px-4 md:px-12 lg:mx-16 bg-form">
             <form ref={formRef} onSubmit={submitInfo} className="flex flex-col gap-2 items-center">
-                <h1 className="text-xl sm:text-2xl md:text-xl lg:text-3xl text-form-foreground mb-4">Diagnóstico de Maturidade Empresarial</h1>
+                <h1 className="text-xl sm:text-2xl md:text-xl lg:text-3xl text-form-foreground mb-4">{title}</h1>
                 <input className={styles.input} type="email" id="email" name="email" placeholder="Email" required/>
                 <label htmlFor="email"></label>
                 <input className={styles.input} type="text" id="nome" name="nome" placeholder="Nome" required/>

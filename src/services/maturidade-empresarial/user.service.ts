@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export async function getUsers() {
     try {
         // Buscar os usuários no banco de dados
-        const users = await prisma.userMaturidadeGestao.findMany();
+        const users = await prisma.userMaturidadeEmpresarial.findMany();
         return users;
     } catch (error) {
         console.error('Erro ao buscar usuários:', error);
@@ -51,7 +51,7 @@ export async function getAverageAnswersByUserId(userId: string) {
             END AS grupo,
             AVG(CASE WHEN resposta = 'yes' THEN 1 ELSE 0 END) AS media
             FROM
-            maturidade_gestao.respostas r 
+            maturidade_empresarial.respostas r 
             WHERE usuario_id = CAST(${userId} as uuid)
             GROUP BY
             grupo;
@@ -74,7 +74,7 @@ export async function saveUser(body: UserDto) {
             telefone: body.telefone.replace(/\D/g, ''),
             faturamento: parseFloat(body.faturamento.replace(/[R$.\s]/g, '').replace(',', '.'))
         }
-        const savedUser = await prisma.userMaturidadeGestao.create({
+        const savedUser = await prisma.userMaturidadeEmpresarial.create({
             data
         });
 
@@ -92,7 +92,7 @@ export async function saveUser(body: UserDto) {
 export async function getAnswersByUserId(userId: string) {
     try {
         // Buscar as respostas no banco de dados
-        const answers = await prisma.answerMaturidadeGestao.findMany({
+        const answers = await prisma.answerMaturidadeEmpresarial.findMany({
             where: {
                 usuario_id: userId
             },
@@ -108,7 +108,7 @@ export async function getAnswersByUserId(userId: string) {
 export async function getZoneByUser(userId: string) {
     try {
         // Buscar a zona do usuário no banco de dados
-        const answers = await prisma.answerMaturidadeGestao.findMany({
+        const answers = await prisma.answerMaturidadeEmpresarial.findMany({
             where: {
                 usuario_id: userId
             }
@@ -138,7 +138,7 @@ export async function saveUserAnswers(userId: string, answers: { questionId: num
             throw new Error('Nenhuma resposta fornecida.');
         }
 
-        const savedAnswers = await prisma.answerMaturidadeGestao.createMany({
+        const savedAnswers = await prisma.answerMaturidadeEmpresarial.createMany({
             data: answers.map(answer => ({
                 usuario_id: userId,
                 resposta: answer.answer,

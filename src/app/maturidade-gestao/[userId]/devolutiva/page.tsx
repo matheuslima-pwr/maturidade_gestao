@@ -127,7 +127,6 @@ export default function Devolutiva({ params }: DevolutivaProps) {
     }
 
     const getZoneInfo = (value: number) => {
-        console.log(value)
         for (const zone of zones) {
             if (value >= zone.min && value <= zone.max) {
                 setZone(zone);

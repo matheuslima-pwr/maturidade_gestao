@@ -7,7 +7,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  schemas  = ["public", "maturidade_gestao", "posicionamento_estrategico"]
+  schemas  = ["public", "maturidade_gestao", "maturidade_empresarial", "posicionamento_estrategico"]
 }
 
 model User {
@@ -50,6 +50,33 @@ model AnswerMaturidadeGestao {
 
   @@map("respostas")
   @@schema("maturidade_gestao")
+}
+
+model UserMaturidadeEmpresarial {
+  id            String         @id @default(uuid())
+  email         String
+  nome          String
+  empresa       String
+  segmento      String
+  telefone      String
+  faturamento   Float
+  created_at    DateTime    @default(now())
+  respostas     AnswerMaturidadeEmpresarial[] @relation("UserMaturidadeEmpresarialAnswers")
+
+  @@map("usuarios")
+  @@schema("maturidade_empresarial")
+}
+
+model AnswerMaturidadeEmpresarial {
+  id              Int       @id @default(autoincrement())
+  pergunta_id     Int
+  resposta        String
+  usuario_id      String
+  created_at      DateTime  @default(now())
+  user            UserMaturidadeEmpresarial @relation("UserMaturidadeEmpresarialAnswers", fields: [usuario_id], references: [id])
+
+  @@map("respostas")
+  @@schema("maturidade_empresarial")
 }
 
 model UserPosEst {

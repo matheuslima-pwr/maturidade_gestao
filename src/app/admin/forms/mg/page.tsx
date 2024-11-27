@@ -96,7 +96,6 @@ export default function Dashboard() {
                 const res = await api.get(`/api/matges/users/${selectedUser?.id}/answers/average`);
                 setAnswers(response.data);
                 setUserAvgAnswers(res.data);
-                console.log(res.data)
             } catch (error) {
                 console.error(error);
             } finally {
