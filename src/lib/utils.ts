@@ -20,3 +20,21 @@ export function formatDateTime(date: string) {
   // Retornar no formato "dd/MM/yy, hhmm"
   return `${day}/${month}/${year}, ${hours}h${minutes}`;
 }
+
+export function formatCurrency(value: string) {
+  value = value.replace('.', '');
+  let decimalPart = '';
+
+  if(value.length === 0) {
+      return '0,00'
+  } else if (value.length > 2) {
+      decimalPart = ',' + value.slice(-2);
+      value = value.slice(0, -2);
+  } else {
+      decimalPart = ',' + value;
+      value = '';
+  }
+
+  value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Adiciona pontos como separadores de milhar
+  return 'R$ ' + value + decimalPart;
+}

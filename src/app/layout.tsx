@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import { Toaster } from "@/components/ui/sonner";
 import { SessionProvider } from "next-auth/react";
+import QueryProvider from "@/providers/query-client.provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,11 +30,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-[100vh] flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col`}
       >
-        <Header/>
-        {children}
-        <Toaster />
+        <QueryProvider>
+          <Header/>
+          {children}
+          <Toaster />
+        </QueryProvider>
       </body>
     </html>
   );

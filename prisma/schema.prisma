@@ -7,7 +7,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  schemas  = ["public", "maturidade_gestao", "maturidade_empresarial", "posicionamento_estrategico"]
+  schemas  = ["public", "maturidade_gestao", "maturidade_empresarial", "posicionamento_estrategico", "valuation"]
 }
 
 model User {
@@ -104,4 +104,37 @@ model AnswerPosEst {
 
   @@map("respostas")
   @@schema("posicionamento_estrategico")
+}
+
+model UserValuation {
+  id                String         @id @default(uuid())
+  email             String
+  nome              String
+  empresa           String
+  segmento          String
+  telefone          String
+  created_at        DateTime    @default(now())
+  dados_financeiros DataValuation[] @relation("UserValuationData")
+
+  @@map("usuarios")
+  @@schema("valuation")
+}
+
+model DataValuation {
+  id                Int           @id @default(autoincrement())
+  usuario_id        String        @unique
+  colaboradores     Int           
+  receita_anual     Float
+  ebitda_anual      Float
+  receita_ttm       Float
+  ebitda_ttm        Float
+  divida_bruta      Float
+  disponibilidade   Float
+  segmento          Int
+  created_at        DateTime      @default(now())
+  updated_at        DateTime      @updatedAt
+  user              UserValuation @relation("UserValuationData", fields: [usuario_id], references: [id])
+  
+  @@map("dados_financeiros")
+  @@schema("valuation")
 }
