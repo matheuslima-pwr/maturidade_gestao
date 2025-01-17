@@ -73,7 +73,7 @@ export default function ValuationResult({ data, loading }: { data: ValuationResu
     const lastYearRange = () => {
         if (!sector?.annual_net_revenue) return null
 
-        const range = ranges.find(r => 100 * Number(data.lastYearRevenue) / sector.annual_net_revenue >= r.inicio && Number(data.lastYearRevenue) / sector.annual_net_revenue <= r.fim)
+        const range = ranges.find(r => 100 * data.lastYearRevenue / sector.annual_net_revenue >= r.inicio && 100 * data.lastYearRevenue / sector.annual_net_revenue <= r.fim)
 
         if (!range) return null
         return {
@@ -85,7 +85,7 @@ export default function ValuationResult({ data, loading }: { data: ValuationResu
     const ttmRange = () => {
         if (!sector?.annual_net_revenue) return null
 
-        const range = ranges.find(r => 100 * Number(data.ttmRevenue) / sector.annual_net_revenue >= r.inicio && Number(data.ttmRevenue) / sector.annual_net_revenue <= r.fim)
+        const range = ranges.find(r => 100 * data.ttmRevenue / sector.annual_net_revenue >= r.inicio && 100 * data.ttmRevenue / sector.annual_net_revenue <= r.fim)
 
         if (!range) return null
         return {
