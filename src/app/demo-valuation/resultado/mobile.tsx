@@ -21,9 +21,14 @@ export default function ValuationResultMobile({ data }: { data: ValuationResultP
 
     const lastYearRange = () => {
         if (!sector?.annual_net_revenue) return null
-
-        const range = ranges.find(r => 100 * data.lastYearRevenue / sector.annual_net_revenue >= r.inicio && 100 * data.lastYearRevenue / sector.annual_net_revenue <= r.fim)
-
+        
+        const margin = 100 * data.lastYearRevenue / sector.annual_net_revenue;
+        
+        // Se a margem for maior que 100%, usa o último range (80-100)
+        const range = margin > 100 
+            ? ranges[ranges.length - 1] 
+            : ranges.find(r => margin >= r.inicio && margin <= r.fim);
+    
         if (!range) return null
         return {
             min: (1 - range.piso / 100) * sector.ev_ebitda,
@@ -33,9 +38,14 @@ export default function ValuationResultMobile({ data }: { data: ValuationResultP
 
     const ttmRange = () => {
         if (!sector?.annual_net_revenue) return null
-
-        const range = ranges.find(r => 100 * data.ttmRevenue / sector.annual_net_revenue >= r.inicio && 100 * data.ttmRevenue / sector.annual_net_revenue <= r.fim)
-
+        
+        const margin = 100 * data.ttmRevenue / sector.annual_net_revenue;
+        
+        // Se a margem for maior que 100%, usa o último range (80-100)
+        const range = margin > 100 
+            ? ranges[ranges.length - 1] 
+            : ranges.find(r => margin >= r.inicio && margin <= r.fim);
+    
         if (!range) return null
         return {
             min: (1 - range.piso / 100) * sector.ev_ebitda,
