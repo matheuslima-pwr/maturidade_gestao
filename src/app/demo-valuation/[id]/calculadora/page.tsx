@@ -88,7 +88,7 @@ export default function CompanyValuationCalculator() {
         setShowResult(true)
         if (validateFormData(data)) {
             try {
-                // await api.post(`/api/valuation/users/${id}`, data)
+                await api.post(`/api/valuation/users/${id}`, data)
                 setData({
                     ...data,
                     lastYearRevenue: Number((data.lastYearRevenue as string).replace(/[R$.\s]/g, '').replace(',', '.')),
