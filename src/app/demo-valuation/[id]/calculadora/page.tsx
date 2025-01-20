@@ -11,10 +11,11 @@ import { redirect, useParams } from 'next/navigation'
 import api from '@/app/api'
 import { useQuery } from '@tanstack/react-query'
 import Loading from '@/components/loading'
-import ValuationResult from '../../resultado'
 import { toast } from 'sonner'
 import FlexTooltip from '@/components/tooltip'
 import { cn } from '@/lib/utils'
+import ValuationResultDesktop from '../../resultado/desktop'
+import ValuationResultMobile from '../../resultado/mobile'
 
 const invoiceMask = (event: React.ChangeEvent<HTMLInputElement>) => {
     const input = event.target;
@@ -87,7 +88,7 @@ export default function CompanyValuationCalculator() {
         setShowResult(true)
         if (validateFormData(data)) {
             try {
-                await api.post(`/api/valuation/users/${id}`, data)
+                // await api.post(`/api/valuation/users/${id}`, data)
                 setData({
                     ...data,
                     lastYearRevenue: Number((data.lastYearRevenue as string).replace(/[R$.\s]/g, '').replace(',', '.')),
@@ -240,7 +241,12 @@ export default function CompanyValuationCalculator() {
                             <CardDescription className='text-sm lg:text-base text-gray-600'>Aqui você verá o valor de mercado da sua empresa e sua comparação com o mercado.</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <ValuationResult data={data} loading={loading} />
+                            <div className="lg:hidden block">
+                                <ValuationResultMobile data={data} />
+                            </div>
+                            <div className="hidden lg:block">
+                                <ValuationResultDesktop data={data} />
+                            </div>
                             <div className="lg:hidden my-4">
                                 <Button
                                     onClick={() => {

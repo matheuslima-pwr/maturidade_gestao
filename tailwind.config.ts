@@ -10,29 +10,29 @@ const config: Config = {
   ],
   theme: {
   	extend: {
-		backgroundImage: {
-			'card-bg': 'url("/img/card-bg.jpg")',
-		},
+  		backgroundImage: {
+  			'card-bg': 'url("/img/card-bg.jpg")'
+  		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
   				DEFAULT: 'hsl(var(--card))',
-  				foreground: 'hsl(var(--card-foreground))',
+  				foreground: 'hsl(var(--card-foreground))'
   			},
-			form: {
-				DEFAULT: 'var(--form)',
-				foreground: 'var(--form-foreground)',
-				shadow: 'var(--form-shadow)',
-			},
+  			form: {
+  				DEFAULT: 'var(--form)',
+  				foreground: 'var(--form-foreground)',
+  				shadow: 'var(--form-shadow)'
+  			},
   			popover: {
   				DEFAULT: 'var(--popover)',
   				foreground: 'var(--popover-foreground)'
   			},
-			toast: {
-				DEFAULT: 'var(--toast)',
-				foreground: 'var(--toast-foreground)',
-			},
+  			toast: {
+  				DEFAULT: 'var(--toast)',
+  				foreground: 'var(--toast-foreground)'
+  			},
   			primary: {
   				DEFAULT: 'hsl(var(--primary))',
   				foreground: 'hsl(var(--primary-foreground))'
@@ -62,7 +62,7 @@ const config: Config = {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
-  			},
+  			}
   		},
   		spacing: {
   			'128': '32rem',
@@ -75,6 +75,28 @@ const config: Config = {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
+  		},
+  		keyframes: {
+  			'accordion-down': {
+  				from: {
+  					height: '0'
+  				},
+  				to: {
+  					height: 'var(--radix-accordion-content-height)'
+  				}
+  			},
+  			'accordion-up': {
+  				from: {
+  					height: 'var(--radix-accordion-content-height)'
+  				},
+  				to: {
+  					height: '0'
+  				}
+  			}
+  		},
+  		animation: {
+  			'accordion-down': 'accordion-down 0.2s ease-out',
+  			'accordion-up': 'accordion-up 0.2s ease-out'
   		}
   	}
   },

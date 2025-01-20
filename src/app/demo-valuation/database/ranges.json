@@ -1,0 +1,32 @@
+[
+    {
+        "inicio": 0,
+        "fim": 20,
+        "piso": 70,
+        "teto": 55
+    },
+    {
+        "inicio": 20.01,
+        "fim": 40,
+        "piso": 55,
+        "teto": 40
+    },
+    {
+        "inicio": 40.01,
+        "fim": 60,
+        "piso": 40,
+        "teto": 25
+    },
+    {
+        "inicio": 60.01,
+        "fim": 80,
+        "piso": 25,
+        "teto": 15
+    },
+    {
+        "inicio": 80.01,
+        "fim": 100,
+        "piso": 15,
+        "teto": 10
+    }
+]
