@@ -3,14 +3,7 @@
 import { Badge } from "@/components/ui/badge"
 
 import { Button } from "@/components/ui/button"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
+
 import { Progress } from "@/components/ui/progress"
 import {
     Table,
@@ -55,9 +48,9 @@ import { AnswerMaturidadeGestao, UserMaturidadeGestao } from "@prisma/client";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/navigation";
 import { Undo2 } from "lucide-react";
+import { AutoComplete } from "@/components/AutoComplete";
 
 export default function Dashboard() {
-    const [searchQuery, setSearchQuery] = useState("");
     const [selectedUser, setSelectedUser] = useState<UserMaturidadeGestao | null>(null);
     const [leads, setLeads] = useState<UserMaturidadeGestao[]>([]);
     const [answers, setAnswers] = useState<AnswerMaturidadeGestao[]>([]);
@@ -66,15 +59,14 @@ export default function Dashboard() {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
-    // Filter emails based on search query
-    const filteredEmails = leads.map((lead) => lead.email).filter((email) => email.includes(searchQuery));
-
     useEffect(() => {
         const fetchLeads = async () => {
             try {
                 setLoading(true);
-                const leadsResponse = await api.get(`/api/matges/users`);
-                const averageResponse = await api.get(`/api/matges/users/answers/average`);
+                const [leadsResponse, averageResponse] = await Promise.all([
+                    api.get(`/api/matges/users`),
+                    api.get(`/api/matges/users/answers/average`)
+                ])
                 setLeads(leadsResponse.data);
                 setAverageAnswers(averageResponse.data);
 
@@ -91,9 +83,11 @@ export default function Dashboard() {
         const fetchAnswers = async () => {
             try {
                 setLoading(true);
-                if(!selectedUser) return;
-                const response = await api.get(`/api/matges/users/${selectedUser?.id}/answers`);
-                const res = await api.get(`/api/matges/users/${selectedUser?.id}/answers/average`);
+                if (!selectedUser) return;
+                const [response, res] = await Promise.all([
+                    api.get(`/api/matges/users/${selectedUser?.id}/answers`),
+                    api.get(`/api/matges/users/${selectedUser?.id}/answers/average`)
+                ])
                 setAnswers(response.data);
                 setUserAvgAnswers(res.data);
             } catch (error) {
@@ -105,8 +99,8 @@ export default function Dashboard() {
         fetchAnswers();
     }, [selectedUser]);
 
-    const handleSelectEmail = (email: string) => {
-        const selectedLead = leads.find((lead) => lead.email === email);
+    const handleSelectEmail = (id: string) => {
+        const selectedLead = leads.find((lead) => lead.id === id);
         setSelectedUser(selectedLead || null);
     };
 
@@ -138,7 +132,7 @@ export default function Dashboard() {
             Media: 100 * (Number(averageAnswers.find(item => item.grupo === 'Liderança e Gestão de Pessoas')?.media) || 0),
             Resposta: 100 * (Number(userAvgAnswers.find(item => item.grupo === 'Liderança e Gestão de Pessoas')?.media) || 0),
             icon: 'fa-solid:user-tie'
-        }
+        },
     ];
 
     const CustomLegend = (props: { payload: { color: string; payload: { dataKey: string; }; }[] }) => {
@@ -161,7 +155,7 @@ export default function Dashboard() {
     return (
         <div className=" flex-1 flex w-full flex-col bg-background">
             <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-                <Button onClick={() => router.push('/admin/forms')} className="mx-6 flex items-center w-min gap-2 bg-[#004477] text-white">
+                <Button onClick={() => router.push('/admin/forms')} className="mx-6 flex items-center w-min gap-2 bg-[#004477] text-white hover:bg-[#004477]/80">
                     <Undo2 size={20} />
                     Voltar para seleção
                 </Button>
@@ -233,42 +227,21 @@ export default function Dashboard() {
                             </CardContent>
                         </Card>
                     </div>
-                    <div className="grid gap-2">
+                    <div className="grid gap-4">
 
-                        <Card>
-                            <CardHeader className="pb-4">
+                        <Card className="max-h-[132px]">
+                            <CardHeader className="pb-2">
                                 <CardTitle>Filtro de Email</CardTitle>
                                 <CardDescription>Escolha o Email do respondente</CardDescription>
                             </CardHeader>
-                            <CardContent>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button className="flex items-center gap-2 bg-black text-white hover:bg-black/80 hover:text-white">
-                                            Filtro
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent>
-                                        {/* Search Input */}
-                                        <div className="p-2">
-                                            <Input
-                                                type="text"
-                                                placeholder="Pesquisar..."
-                                                value={searchQuery}
-                                                onChange={(e) => setSearchQuery(e.target.value)}
-                                            />
-                                        </div>
-                                        <DropdownMenuSeparator />
-
-                                        {/* Filtered Email List */}
-                                        {filteredEmails.length > 0 ? (
-                                            filteredEmails.map((email, index) => (
-                                                <DropdownMenuItem key={index} onClick={() => handleSelectEmail(email)}>{email}</DropdownMenuItem>
-                                            ))
-                                        ) : (
-                                            <DropdownMenuItem disabled>Nenhum resultado</DropdownMenuItem>
-                                        )}
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
+                            <CardContent className="flex flex-col gap-2">
+                                <AutoComplete
+                                    options={leads.map((lead) => ({ label: lead.email, value: lead.id }))}
+                                    onValueChange={(option) => handleSelectEmail(option.value)}
+                                    placeholder="Digite o email..."
+                                    emptyMessage="Email não encontrado"
+                                    visibleItemsCount={5}
+                                />
                             </CardContent>
                         </Card>
 

@@ -37,11 +37,11 @@ export async function verifyUser(id: string) {
     return user ? true : false;
 }
 
-export async function saveValuation(id: string, body: ValuationDto) {
+export async function saveValuation(userId: string, body: ValuationDto) {
     try {
         // Validar se o usuário existe antes de tentar salvar
         const userExists = await prisma.userValuation.findUnique({
-            where: { id }
+            where: { id: userId }
         });
 
         if (!userExists) {
@@ -57,7 +57,7 @@ export async function saveValuation(id: string, body: ValuationDto) {
             ebitda_ttm: Number(body.ttmEbitda.replace(/[R$.\s]/g, '').replace(',', '.')),
             divida_bruta: Number(body.grossDebt.replace(/[R$.\s]/g, '').replace(',', '.')),
             disponibilidade: Number(body.availability.replace(/[R$.\s]/g, '').replace(',', '.')),
-            usuario_id: id,
+            usuario_id: userId,
         }
 
         // Validar se todos os números são válidos
@@ -69,7 +69,7 @@ export async function saveValuation(id: string, body: ValuationDto) {
 
         const savedValuation = await prisma.dataValuation.upsert({
             where: {
-                usuario_id: id
+                usuario_id: userId
             },
             update: data,
             create: data

@@ -12,10 +12,10 @@ import api from '@/app/api'
 import { useQuery } from '@tanstack/react-query'
 import Loading from '@/components/loading'
 import { toast } from 'sonner'
-import FlexTooltip from '@/components/tooltip'
 import { cn } from '@/lib/utils'
 import ValuationResultDesktop from '../../resultado/desktop'
 import ValuationResultMobile from '../../resultado/mobile'
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog'
 
 const invoiceMask = (event: React.ChangeEvent<HTMLInputElement>) => {
     const input = event.target;
@@ -37,13 +37,7 @@ const invoiceMask = (event: React.ChangeEvent<HTMLInputElement>) => {
     input.value = input.value ? 'R$ ' + value + decimalPart : '';
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const validateFormData = (data: any) => {
-    if (data.employee === '' || data.lastYearRevenue === '' || data.ttmRevenue === '' || data.lastYearEbitda === '' || data.ttmEbitda === '' || data.grossDebt === '' || data.availability === '') {
-        return false
-    }
-    return true
-}
+
 
 interface FormState {
     employee: number
@@ -54,6 +48,13 @@ interface FormState {
     grossDebt: number
     availability: number
     sectorId: number
+}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const validateFormData = (data: any) => {
+    if (data.employee === '' || data.lastYearRevenue === '' || data.ttmRevenue === '' || data.lastYearEbitda === '' || data.ttmEbitda === '' || data.grossDebt === '' || data.availability === '') {
+        return false
+    }
+    return true
 }
 
 export default function CompanyValuationCalculator() {
@@ -69,6 +70,8 @@ export default function CompanyValuationCalculator() {
     })
     const [showResult, setShowResult] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [loadingEmail, setLoadingEmail] = useState(false)
+    const [openEmailDialog, setOpenEmailDialog] = useState(false)
     const { id } = useParams()
 
     const { data: isUserVerified, isFetching } = useQuery({
@@ -78,6 +81,22 @@ export default function CompanyValuationCalculator() {
             return response.data
         }
     })
+
+    const handleSendEmail = async () => {
+        const element = document.getElementById('result-desktop')
+        if (!element) return
+
+        try {
+            setLoadingEmail(true)
+            await api.post(`/api/valuation/users/${id}/send-email`, data)
+            toast.success('Email enviado com sucesso!')
+        } catch (error) {
+            toast.error('Ocorreu um erro ao enviar o email. Tente novamente mais tarde.')
+        } finally {
+            setLoadingEmail(false)
+            setOpenEmailDialog(false)
+        }
+    }
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -121,10 +140,10 @@ export default function CompanyValuationCalculator() {
             >
                 <CardHeader>
                     <CardTitle className='text-base lg:text-lg'>Formulário de Avaliação</CardTitle>
-                    <CardDescription className='text-sm lg:text-base'>Insira os dados financeiros da sua empresa para calcular seu valor de mercado com base no EBITDA.</CardDescription>
+                    <CardDescription className='text-sm lg:text-base'>Insira os dados financeiros da sua empresa para calcular seu valuation.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                    <form onSubmit={handleSubmit} className="space-y-4" id='form'>
                         <div className="space-y-2">
                             <Label htmlFor="sector">Segmento</Label>
                             <AutoComplete
@@ -190,7 +209,7 @@ export default function CompanyValuationCalculator() {
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="gross-debt">Dívida Bruta</Label>
+                            <Label htmlFor="gross-debt">Dívida Bruta (Amortização do Endividamento)</Label>
                             <Input
                                 id="gross-debt"
                                 name="grossDebt"
@@ -200,7 +219,7 @@ export default function CompanyValuationCalculator() {
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="availability">Disponibilidade</Label>
+                            <Label htmlFor="availability">Disponibilidade (Caixa e Equivalentes)</Label>
                             <Input
                                 id="availability"
                                 name="availability"
@@ -209,13 +228,14 @@ export default function CompanyValuationCalculator() {
                                 required
                             />
                         </div>
-                        <Button
-                            type="submit"
-                            className="bg-black text-white hover:bg-black/80 w-full lg:h-12 h-8 text-sm lg:text-base"
-                        >
-                            Calcular Valor de Mercado
-                        </Button>
                     </form>
+                    <Button
+                        type="submit"
+                        form="form"
+                        className="bg-black text-white hover:bg-black/80 w-full lg:h-12 h-8 text-sm lg:text-base mt-4"
+                    >
+                        Calcular Valor de Mercado
+                    </Button>
                 </CardContent>
             </Card>
 
@@ -225,20 +245,13 @@ export default function CompanyValuationCalculator() {
                 {loading ? <Loading /> : (
                     <>
                         <CardHeader>
-                            <CardTitle className='text-base lg:text-lg flex items-center gap-2'>
+                            <CardTitle className='text-base md:text-lg lg:text-lg'>
                                 <p>Resultado</p>
-                                <FlexTooltip
-                                    className='w-72 lg:w-[500px] bg-gray-700 text-white text-sm'
-                                    trigger={
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-                                            <path fill="#004477" d="M11 17h2v-6h-2zm1-8q.425 0 .713-.288T13 8t-.288-.712T12 7t-.712.288T11 8t.288.713T12 9m0 13q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20m0-8" />
-                                        </svg>
-                                    }
-                                >
-                                    <span>Os valores não refletem uma avaliação formal para ser usada em negociações de compra e venda e são dados estimados com base em informações das bases do site do professor Damodaran, com intuito de analisar ordens de grandeza genéricas.</span>
-                                </FlexTooltip>
                             </CardTitle>
-                            <CardDescription className='text-sm lg:text-base text-gray-600'>Aqui você verá o valor de mercado da sua empresa e sua comparação com o mercado.</CardDescription>
+                            <CardDescription className='text-sm md:text-base lg:text-base text-gray-600'>
+                                Aqui você verá o valuation da sua empresa e sua comparação com o mercado.
+                            </CardDescription>
+                            <span className='text-xs md:text-sm lg:text-sm text-gray-600 font-semibold'>As empresas que usamos de benchmark se encontram nos seguintes paises: China, India, América Latina, Asia e demais regiões emergentes.</span>
                         </CardHeader>
                         <CardContent>
                             <div className="lg:hidden block">
@@ -247,13 +260,56 @@ export default function CompanyValuationCalculator() {
                             <div className="hidden lg:block">
                                 <ValuationResultDesktop data={data} />
                             </div>
+                            <AlertDialog open={openEmailDialog} onOpenChange={setOpenEmailDialog}>
+                                <AlertDialogTrigger asChild>
+                                    <Button
+                                        className='bg-black text-white hover:bg-black/80 w-full lg:w-auto lg:h-12 h-10 text-sm lg:text-base mt-4'
+                                        disabled={!data.ttmRevenue || !data.ttmEbitda || !data.lastYearRevenue || !data.lastYearEbitda || !data.grossDebt || !data.availability || !data.employee}
+                                    >
+                                        Receber resultado por email
+                                    </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent className='bg-white'>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>
+                                            Deseja receber o resultado por email?
+                                        </AlertDialogTitle>
+                                        <AlertDialogDescription className='text-gray-600'>
+                                            O resultado será enviado para o email que você inseriu no formulário de cadastro.
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel>
+                                            Cancelar
+                                        </AlertDialogCancel>
+                                        <AlertDialogAction
+                                            className='bg-black text-white hover:bg-black/80'
+                                            onClick={(e) => {
+                                                e.preventDefault()
+                                                handleSendEmail()
+                                            }}
+                                            disabled={loadingEmail}>
+                                            {loadingEmail ?
+                                                <p className='flex items-center gap-2'>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                                                        <path fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M12 6.99998C9.1747 6.99987 6.99997 9.24998 7 12C7.00003 14.55 9.02119 17 12 17C14.7712 17 17 14.75 17 12">
+                                                            <animateTransform attributeName="transform" attributeType="XML" dur="560ms" from="0,12,12" repeatCount="indefinite" to="360,12,12" type="rotate" />
+                                                        </path>
+                                                    </svg>
+                                                    <span>Enviando...</span>
+                                                </p>
+                                                : 'Sim, enviar por email'}
+                                        </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
                             <div className="lg:hidden my-4">
                                 <Button
                                     onClick={() => {
                                         setShowResult(false)
                                         window.scrollTo({ top: 0, behavior: 'smooth' })
                                     }}
-                                    className="w-full bg-black text-white hover:bg-black/80 mt-4"
+                                    className="w-full bg-black text-white hover:bg-black/80 h-10"
                                 >
                                     Voltar para o Formulário
                                 </Button>

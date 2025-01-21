@@ -4,31 +4,22 @@ import ranges from "@/app/demo-valuation/database/ranges.json"
 import { TrendingDownIcon, TrendingUpIcon } from "lucide-react"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import FlexTooltip from "@/components/tooltip"
+import { ValuationData } from "@/@types/valuation"
 
-interface ValuationResultProps {
-    employee: number
-    lastYearRevenue: number
-    ttmRevenue: number
-    lastYearEbitda: number
-    ttmEbitda: number
-    grossDebt: number
-    availability: number
-    sectorId: number
-}
 
-export default function ValuationResultMobile({ data }: { data: ValuationResultProps }) {
+export default function ValuationResultMobile({ data }: { data: ValuationData }) {
     const sector = sectors.find(sector => sector.id === data.sectorId)
 
     const lastYearRange = () => {
         if (!sector?.annual_net_revenue) return null
-        
+
         const margin = 100 * data.lastYearRevenue / sector.annual_net_revenue;
-        
+
         // Se a margem for maior que 100%, usa o último range (80-100)
-        const range = margin > 100 
-            ? ranges[ranges.length - 1] 
+        const range = margin > 100
+            ? ranges[ranges.length - 1]
             : ranges.find(r => margin >= r.inicio && margin <= r.fim);
-    
+
         if (!range) return null
         return {
             min: (1 - range.piso / 100) * sector.ev_ebitda,
@@ -38,14 +29,14 @@ export default function ValuationResultMobile({ data }: { data: ValuationResultP
 
     const ttmRange = () => {
         if (!sector?.annual_net_revenue) return null
-        
+
         const margin = 100 * data.ttmRevenue / sector.annual_net_revenue;
-        
+
         // Se a margem for maior que 100%, usa o último range (80-100)
-        const range = margin > 100 
-            ? ranges[ranges.length - 1] 
+        const range = margin > 100
+            ? ranges[ranges.length - 1]
             : ranges.find(r => margin >= r.inicio && margin <= r.fim);
-    
+
         if (!range) return null
         return {
             min: (1 - range.piso / 100) * sector.ev_ebitda,
@@ -68,7 +59,7 @@ export default function ValuationResultMobile({ data }: { data: ValuationResultP
                                 }
                                 className='w-60 bg-gray-700 text-white text-sm p-2'
                             >
-                                <p>Quantidade de empresas do segmento selecionado em mercados emergentes</p>
+                                <p>Quantidade de empresas do seu segmento em mercados emergentes</p>
                             </FlexTooltip>
                         </CardTitle>
                     </CardHeader>
@@ -78,58 +69,25 @@ export default function ValuationResultMobile({ data }: { data: ValuationResultP
                 </Card>
                 <Card className='shadow shadow-base w-full lg:w-auto'>
                     <CardHeader className='p-4 text-center'>
-                        <CardTitle className='text-base lg:text-lg'>Múltiplo EBITDA</CardTitle>
+                        <CardTitle className='flex items-center justify-center gap-2'>
+                            <p className='text-base md:text-lg'>Múltiplo EBITDA</p>
+                            <FlexTooltip
+                                trigger={
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                                        <path fill="#fb5500" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10m0-2a8 8 0 1 0 0-16a8 8 0 0 0 0 16m-1-5h2v2h-2zm2-1.645V14h-2v-1.5a1 1 0 0 1 1-1a1.5 1.5 0 1 0-1.471-1.794l-1.962-.393A3.501 3.501 0 1 1 13 13.355" />
+                                    </svg>
+                                }
+                                className='w-60 bg-gray-700 text-white text-sm p-2'
+                            >
+                                <p>Média do Múltiplo EBITDA de empresas do segmento selecionado em mercados emergentes.</p>
+                            </FlexTooltip>
+                        </CardTitle>
                     </CardHeader>
                     <CardContent className='text-center'>
                         <p className='text-2xl font-semibold'>{sector ? sector.ev_ebitda.toFixed(1) : '-'}</p>
                     </CardContent>
                 </Card>
             </div>
-            <Card>
-                <Accordion type="single" collapsible defaultValue="ebitda-margin">
-                    <AccordionItem value="ebitda-margin" className="border-none">
-                        <AccordionTrigger className="px-6 py-4 text-base lg:text-lg hover:no-underline">
-                            Margem EBITDA do Segmento
-                        </AccordionTrigger>
-                        <AccordionContent className="px-6 pb-4">
-                            <div className="space-y-4">
-                                <div className="flex justify-between gap-2">
-                                    <p className="text-gray-700 font-medium">Sua Empresa</p>
-                                    <p className="text-gray-700 font-medium">
-                                        {data.lastYearRevenue ? `${(100 * data.lastYearEbitda / data.lastYearRevenue).toFixed(1)}%` : '-'}
-                                    </p>
-                                </div>
-
-                                <div className="flex justify-between gap-2">
-                                    <p className="text-gray-700 font-medium">Mercado</p>
-                                    <p className="text-gray-700 font-medium">
-                                        {sector ? `${(100 * sector.ebitda_margin).toFixed(1)}%` : '-'}
-                                    </p>
-                                </div>
-
-                                <hr className="my-4" />
-
-                                <div className="flex justify-between gap-2">
-                                    <p className="text-gray-700 font-semibold">Comparação</p>
-                                    <div className="font-medium">
-                                        {sector && (data.lastYearEbitda / data.lastYearRevenue) > sector.ebitda_margin ? (
-                                            <span className="text-green-500 flex items-center gap-1">
-                                                <TrendingUpIcon className="inline w-4 h-4" />
-                                                Acima do Mercado
-                                            </span>
-                                        ) : (
-                                            <span className="text-red-500 flex items-center gap-1">
-                                                <TrendingDownIcon className="inline w-4 h-4" />
-                                                Abaixo do Mercado
-                                            </span>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        </AccordionContent>
-                    </AccordionItem>
-                </Accordion>
-            </Card>
 
             <Card className="w-full">
                 <Accordion type="single" collapsible defaultValue="revenue-per-employee">
@@ -186,19 +144,27 @@ export default function ValuationResultMobile({ data }: { data: ValuationResultP
                         <AccordionContent className="space-y-4 px-6 pb-4">
                             <div className="flex justify-between gap-2">
                                 <p className="text-gray-700 font-medium">Sua Empresa</p>
-                                <p className="text-gray-700 font-medium">{data.lastYearRevenue ? `${data.lastYearRevenue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}` : '-'}</p>
+                                <p className="text-gray-700 font-medium">{data.lastYearRevenue ? `${data.lastYearRevenue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}` : '-'}</p>
                             </div>
                             <div className="flex justify-between gap-2">
                                 <p className="text-gray-700 font-medium">Mercado</p>
-                                <p className="text-gray-700 font-medium">{sector ? `${sector.annual_net_revenue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}` : '-'}</p>
+                                <p className="text-gray-700 font-medium">{sector ? `${sector.annual_net_revenue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}` : '-'}</p>
                             </div>
                             <hr className="my-4" />
                             <div className="flex justify-between gap-2">
                                 <p className="text-gray-700 font-semibold">Comparação</p>
                                 <p className="font-medium">
-                                    {sector &&
-                                        `${(100 * data.lastYearRevenue / sector.annual_net_revenue).toFixed(1)}%`
-                                    }
+                                    {sector && data.lastYearRevenue > sector.annual_net_revenue ? (
+                                        <span className="text-green-500 flex items-center gap-1">
+                                            <TrendingUpIcon className="inline w-4 h-4" />
+                                            Acima do Mercado
+                                        </span>
+                                    ) : (
+                                        <span className="text-red-500 flex items-center gap-1">
+                                            <TrendingDownIcon className="inline w-4 h-4" />
+                                            Abaixo do Mercado
+                                        </span>
+                                    )}
                                 </p>
                             </div>
                         </AccordionContent>
@@ -215,19 +181,27 @@ export default function ValuationResultMobile({ data }: { data: ValuationResultP
                         <AccordionContent className="space-y-4 px-6 pb-4">
                             <div className="flex justify-between gap-2">
                                 <p className="text-gray-700 font-medium">Sua Empresa</p>
-                                <p className="text-gray-700 font-medium">{data.ttmRevenue ? `${data.ttmRevenue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}` : '-'}</p>
+                                <p className="text-gray-700 font-medium">{data.ttmRevenue ? `${data.ttmRevenue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}` : '-'}</p>
                             </div>
                             <div className="flex justify-between gap-2">
                                 <p className="text-gray-700 font-medium">Mercado</p>
-                                <p className="text-gray-700 font-medium">{sector ? `${sector.annual_net_revenue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}` : '-'}</p>
+                                <p className="text-gray-700 font-medium">{sector ? `${sector.annual_net_revenue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}` : '-'}</p>
                             </div>
                             <hr className="my-4" />
                             <div className="flex justify-between gap-2">
                                 <p className="text-gray-700 font-semibold">Comparação</p>
                                 <p className="font-medium">
-                                    {sector &&
-                                        `${(100 * data.ttmRevenue / sector.annual_net_revenue).toFixed(1)}%`
-                                    }
+                                    {sector && data.ttmRevenue > sector.annual_net_revenue ? (
+                                        <span className="text-green-500 flex items-center gap-1">
+                                            <TrendingUpIcon className="inline w-4 h-4" />
+                                            Acima do Mercado
+                                        </span>
+                                    ) : (
+                                        <span className="text-red-500 flex items-center gap-1">
+                                            <TrendingDownIcon className="inline w-4 h-4" />
+                                            Abaixo do Mercado
+                                        </span>
+                                    )}
                                 </p>
                             </div>
                         </AccordionContent>
@@ -244,17 +218,17 @@ export default function ValuationResultMobile({ data }: { data: ValuationResultP
                         <AccordionContent className="px-6 pb-4">
                             <div className="space-y-6">
                                 <div className="space-y-2">
-                                    <h3 className="text-sm font-medium text-muted-foreground">Múltiplo Aplicado</h3>
+                                    <h3 className="text-sm md:text-base font-medium text-muted-foreground">Múltiplo Aplicado</h3>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div>
-                                            <span className="text-xs text-muted-foreground">Min</span>
-                                            <p className="text-lg font-medium">
+                                            <span className="text-xs md:text-sm text-muted-foreground">Min</span>
+                                            <p className="text-lg md:text-xl font-medium">
                                                 {lastYearRange()?.min.toFixed(1)}
                                             </p>
                                         </div>
                                         <div>
-                                            <span className="text-xs text-muted-foreground">Max</span>
-                                            <p className="text-lg font-medium">
+                                            <span className="text-xs md:text-sm text-muted-foreground">Max</span>
+                                            <p className="text-lg md:text-xl font-medium">
                                                 {lastYearRange()?.max.toFixed(1)}
                                             </p>
                                         </div>
@@ -262,36 +236,36 @@ export default function ValuationResultMobile({ data }: { data: ValuationResultP
                                 </div>
                                 <hr className="mt-2" />
                                 <div className="space-y-2">
-                                    <h3 className="text-sm font-medium text-muted-foreground">Valuation da Firma</h3>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <span className="text-xs text-muted-foreground">Min</span>
+                                    <h3 className="text-sm md:text-base font-medium text-muted-foreground">Valor da Firma</h3>
+                                    <div className="grid grid-rows-2 gap-4">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-xs md:text-sm text-muted-foreground">Min</span>
                                             <p className="text-lg font-medium">
-                                                {(data.lastYearEbitda * (lastYearRange()?.min ?? 0)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                                {(data.lastYearEbitda * (lastYearRange()?.min ?? 0)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}
                                             </p>
                                         </div>
-                                        <div>
-                                            <span className="text-xs text-muted-foreground">Max</span>
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-xs md:text-sm text-muted-foreground">Max</span>
                                             <p className="text-lg font-medium">
-                                                {(data.lastYearEbitda * (lastYearRange()?.max ?? 0)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                                {(data.lastYearEbitda * (lastYearRange()?.max ?? 0)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                                 <hr className="mt-2" />
                                 <div className="space-y-2">
-                                    <h3 className="text-sm font-medium text-muted-foreground">Valuation para Acionistas</h3>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <span className="text-xs text-muted-foreground">Min</span>
+                                    <h3 className="text-sm md:text-base font-medium text-muted-foreground">Valor para Acionistas</h3>
+                                    <div className="grid grid-rows-2 gap-4">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-xs md:text-sm text-muted-foreground">Min</span>
                                             <p className="text-lg font-medium">
-                                                {(data.lastYearEbitda * (ttmRange()?.min ?? 0) - data.grossDebt + data.availability).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                                {(data.lastYearEbitda * (ttmRange()?.min ?? 0) - data.grossDebt + data.availability).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}
                                             </p>
                                         </div>
-                                        <div>
-                                            <span className="text-xs text-muted-foreground">Max</span>
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-xs md:text-sm text-muted-foreground">Max</span>
                                             <p className="text-lg font-medium">
-                                                {(data.lastYearEbitda * (ttmRange()?.max ?? 0) - data.grossDebt + data.availability).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                                {(data.lastYearEbitda * (ttmRange()?.max ?? 0) - data.grossDebt + data.availability).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}
                                             </p>
                                         </div>
                                     </div>
@@ -311,16 +285,16 @@ export default function ValuationResultMobile({ data }: { data: ValuationResultP
                         <AccordionContent className="px-6 pb-4">
                             <div className="space-y-6">
                                 <div className="space-y-2">
-                                    <h3 className="text-sm font-medium text-muted-foreground">Múltiplo Aplicado</h3>
+                                    <h3 className="text-sm md:text-base font-medium text-muted-foreground">Múltiplo Aplicado</h3>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div>
-                                            <span className="text-xs text-muted-foreground">Min</span>
+                                            <span className="text-xs md:text-sm text-muted-foreground">Min</span>
                                             <p className="text-lg font-medium">
                                                 {ttmRange()?.min.toFixed(1)}
                                             </p>
                                         </div>
                                         <div>
-                                            <span className="text-xs text-muted-foreground">Max</span>
+                                            <span className="text-xs md:text-sm text-muted-foreground">Max</span>
                                             <p className="text-lg font-medium">
                                                 {ttmRange()?.max.toFixed(1)}
                                             </p>
@@ -329,16 +303,16 @@ export default function ValuationResultMobile({ data }: { data: ValuationResultP
                                 </div>
                                 <hr className="mt-2" />
                                 <div className="space-y-2">
-                                    <h3 className="text-sm font-medium text-muted-foreground">Valuation da Firma</h3>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <span className="text-xs text-muted-foreground">Min</span>
+                                    <h3 className="text-sm md:text-base font-medium text-muted-foreground">Valor da Firma</h3>
+                                    <div className="grid grid-rows-2 gap-4">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-xs md:text-sm text-muted-foreground">Min</span>
                                             <p className="text-lg font-medium">
                                                 {(data.ttmEbitda * (ttmRange()?.min ?? 0)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                                             </p>
                                         </div>
-                                        <div>
-                                            <span className="text-xs text-muted-foreground">Max</span>
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-xs md:text-sm text-muted-foreground">Max</span>
                                             <p className="text-lg font-medium">
                                                 {(data.ttmEbitda * (ttmRange()?.max ?? 0)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                                             </p>
@@ -347,16 +321,16 @@ export default function ValuationResultMobile({ data }: { data: ValuationResultP
                                 </div>
                                 <hr className="mt-2" />
                                 <div className="space-y-2">
-                                    <h3 className="text-sm font-medium text-muted-foreground">Valuation para Acionistas</h3>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <span className="text-xs text-muted-foreground">Min</span>
+                                    <h3 className="text-sm md:text-base font-medium text-muted-foreground">Valor para Acionistas</h3>
+                                    <div className="grid grid-rows-2 gap-4">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-xs md:text-sm text-muted-foreground">Min</span>
                                             <p className="text-lg font-medium">
                                                 {(data.ttmEbitda * (ttmRange()?.min ?? 0) - data.grossDebt + data.availability).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                                             </p>
                                         </div>
-                                        <div>
-                                            <span className="text-xs text-muted-foreground">Max</span>
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-xs md:text-sm text-muted-foreground">Max</span>
                                             <p className="text-lg font-medium">
                                                 {(data.ttmEbitda * (ttmRange()?.max ?? 0) - data.grossDebt + data.availability).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                                             </p>
@@ -368,6 +342,7 @@ export default function ValuationResultMobile({ data }: { data: ValuationResultP
                     </AccordionItem>
                 </Accordion>
             </Card>
+            <span className='text-xs lg:text-sm text-gray-600 font-semibold'>Os valores não refletem uma avaliação formal para ser usada em negociações de compra e venda e são dados estimados com base em informações das bases do site do professor Damodaran, com intuito de analisar ordens de grandeza genéricas.</span>
         </div>
     )
 }

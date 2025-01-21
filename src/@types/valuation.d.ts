@@ -8,3 +8,14 @@ export type ValuationDto = {
     ttmEbitda: string;
     ttmRevenue: string;
 }
+
+export type ValuationData = {
+    lastYearRevenue: number;
+    ttmRevenue: number;
+    lastYearEbitda: number;
+    ttmEbitda: number;
+    grossDebt: number;
+    availability: number;
+    sectorId: number;
+    employee: number;
+}
