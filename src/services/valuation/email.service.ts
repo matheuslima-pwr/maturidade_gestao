@@ -34,7 +34,7 @@ export const sendEmailService = async (userId: string, body: ValuationData) => {
         const htmlContent = createEmailTemplate(emailData)
         const browser = await puppeteer.launch({
             headless: true,
-            executablePath: '/opt/bin/chromium',
+            executablePath: '/usr/bin/chromium-browser',
             args: ['--no-sandbox', '--disable-setuid-sandbox'],
         })
         const page = await browser.newPage()

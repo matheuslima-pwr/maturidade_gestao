@@ -8,6 +8,6 @@ module.exports = {
     // Specify cache directory for Puppeteer
     cacheDirectory: join(__dirname, '.cache', 'puppeteer'),
     // Specify which Chromium version Puppeteer should install
-    executablePath: '/opt/bin/chromium',
+    executablePath: '/usr/bin/chromium-browser',
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
 };
