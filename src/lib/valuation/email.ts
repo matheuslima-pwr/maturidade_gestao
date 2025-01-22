@@ -87,7 +87,7 @@ export function createEmailTemplate({
                     <div class="metric-value">${sector.number_of_companies}</div>
                 </div>
                 <div class="metric-card">
-                    <div class="metric-title">Múltiplo EBITDA²</div>
+                    <div class="metric-title">Múltiplo EBITDA[2]</div>
                     <div class="metric-value">${sector.ev_ebitda.toFixed(1)}</div>
                 </div>
                 <div class="metric-card">
@@ -190,10 +190,10 @@ export function createEmailTemplate({
                 As empresas que foram usadas como benchmark se encontram nos seguintes paises: China, India, América Latina, Asia e demais regiões emergentes.
             </p>
             <p class="disclaimer">
-                1. Quantidade de empresas do seu segmento em mercados emergentes.
+                [1] Quantidade de empresas do seu segmento em mercados emergentes.
             </p>
             <p class="disclaimer">
-                2. Média do Múltiplo EBITDA das empresas do seu segmento em mercados emergentes.
+                [2] Média do Múltiplo EBITDA das empresas do seu segmento em mercados emergentes.
             </p>
         </div>
     </body>
