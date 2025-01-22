@@ -4,6 +4,7 @@ import { TDocumentDefinitions } from 'pdfmake/interfaces';
 import sectors from '@/app/demo-valuation/database/sectors.json';
 import { lastYearRange, ttmRange } from './utils';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const generatePdf = (data: any) => {
     const sector = sectors.find((sector) => sector.id === data.sectorId)
     if (!sector) return null
