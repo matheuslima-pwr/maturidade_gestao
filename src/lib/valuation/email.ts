@@ -175,8 +175,8 @@ export function createEmailTemplate({
                     </tr>
                     <tr>
                         <td><strong>Valor para Acionistas:</strong></td>
-                        <td>R$ ${(data.ttmEbitda * (ttmRange(data)?.min ?? 0) - data.grossDebt + data.availability).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}</td>
-                        <td>R$ ${(data.ttmEbitda * (ttmRange(data)?.max ?? 0) - data.grossDebt + data.availability).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}</td>
+                        <td>${(data.ttmEbitda * (ttmRange(data)?.min ?? 0) - data.grossDebt + data.availability).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}</td>
+                        <td>${(data.ttmEbitda * (ttmRange(data)?.max ?? 0) - data.grossDebt + data.availability).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}</td>
                     </tr>
                 </tbody>
             </table>

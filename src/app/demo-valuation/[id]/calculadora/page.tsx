@@ -19,11 +19,27 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 
 const invoiceMask = (event: React.ChangeEvent<HTMLInputElement>) => {
     const input = event.target;
-    let value = input.value.replace(/\D/g, ''); // Remove todos os caracteres que não são dígitos
+    const cursorPosition = input.selectionStart || 0;
+    let value = input.value;
+
+    // Permite começar com sinal negativo
+    if (cursorPosition === 0 && (event.nativeEvent as InputEvent).data === '-') {
+        input.value = '-';
+        return;
+    }
+
+    // Remove formatação existente
+    value = value.replace(/[^\d-]/g, ''); // Permite dígitos e hífen
+    const isNegative = value.startsWith('-');
     let decimalPart = '';
 
+    // Remove o sinal negativo para processar apenas os números
+    value = value.replace(/-/g, '');
+
     if (value.length === 0) {
-        input.value = '';
+        // Remove o prefixo completamente se o campo estiver vazio
+        input.value = isNegative ? '-' : '';
+        return;
     } else if (value.length > 2) {
         decimalPart = ',' + value.slice(-2);
         value = value.slice(0, -2);
@@ -32,10 +48,11 @@ const invoiceMask = (event: React.ChangeEvent<HTMLInputElement>) => {
         value = '';
     }
 
-    value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Adiciona pontos como separadores de milhar
+    value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
-    input.value = input.value ? 'R$ ' + value + decimalPart : '';
-}
+    const prefix = isNegative ? '-R$ ' : 'R$ ';
+    input.value = prefix + value + decimalPart;
+};
 
 
 
@@ -100,29 +117,32 @@ export default function CompanyValuationCalculator() {
         const formData = new FormData(event.target as HTMLFormElement)
         const data = Object.fromEntries(formData.entries())
 
+        if (!validateFormData(data)) {
+            toast.error('Preencha todos os campos corretamente.')
+            return
+        }
+
         setLoading(true)
         setShowResult(true)
-        if (validateFormData(data)) {
-            try {
-                await api.post(`/api/valuation/users/${id}`, data)
-                setData({
-                    ...data,
-                    lastYearRevenue: Number((data.lastYearRevenue as string).replace(/[R$.\s]/g, '').replace(',', '.')),
-                    ttmRevenue: Number((data.ttmRevenue as string).replace(/[R$.\s]/g, '').replace(',', '.')),
-                    lastYearEbitda: Number((data.lastYearEbitda as string).replace(/[R$.\s]/g, '').replace(',', '.')),
-                    ttmEbitda: Number((data.ttmEbitda as string).replace(/[R$.\s]/g, '').replace(',', '.')),
-                    grossDebt: Number((data.grossDebt as string).replace(/[R$.\s]/g, '').replace(',', '.')),
-                    availability: Number((data.availability as string).replace(/[R$.\s]/g, '').replace(',', '.')),
-                    sectorId: Number(data.sector),
-                    employee: Number(data.employee)
-                })
-            } catch (error) {
-                setShowResult(false)
-                toast.error('Ocorreu um erro ao realizar o cálculo. Tente novamente mais tarde.')
-                console.error('Erro ao validar os dados:', error)
-            } finally {
-                setLoading(false)
-            }
+        try {
+            await api.post(`/api/valuation/users/${id}`, data)
+            setData({
+                ...data,
+                lastYearRevenue: Number((data.lastYearRevenue as string).replace(/[R$.\s]/g, '').replace(',', '.')),
+                ttmRevenue: Number((data.ttmRevenue as string).replace(/[R$.\s]/g, '').replace(',', '.')),
+                lastYearEbitda: Number((data.lastYearEbitda as string).replace(/[R$.\s]/g, '').replace(',', '.')),
+                ttmEbitda: Number((data.ttmEbitda as string).replace(/[R$.\s]/g, '').replace(',', '.')),
+                grossDebt: Number((data.grossDebt as string).replace(/[R$.\s]/g, '').replace(',', '.')),
+                availability: Number((data.availability as string).replace(/[R$.\s]/g, '').replace(',', '.')),
+                sectorId: Number(data.sector),
+                employee: Number(data.employee)
+            })
+        } catch (error) {
+            setShowResult(false)
+            toast.error('Ocorreu um erro ao realizar o cálculo. Tente novamente mais tarde.')
+            console.error('Erro ao validar os dados:', error)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -276,7 +296,7 @@ export default function CompanyValuationCalculator() {
                                         </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
-                                        <AlertDialogCancel>
+                                        <AlertDialogCancel disabled={loadingEmail}>
                                             Cancelar
                                         </AlertDialogCancel>
                                         <AlertDialogAction

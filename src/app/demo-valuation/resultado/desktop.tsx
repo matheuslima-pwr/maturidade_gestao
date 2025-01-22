@@ -152,8 +152,8 @@ export default function ValuationResultDesktop({ data }: { data: ValuationData }
                         </CustomTableRow>
                         <CustomTableRow>
                             <CustomTableCell className='font-semibold'>Valor para Acionistas: </CustomTableCell>
-                            <CustomTableCell>{ttmRange(data) ? (data.ttmEbitda * (ttmRange(data)?.min ?? 0) - data.grossDebt + data.availability).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '-'}</CustomTableCell>
-                            <CustomTableCell>{ttmRange(data) ? (data.ttmEbitda * (ttmRange(data)?.max ?? 0) - data.grossDebt + data.availability).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : '-'}</CustomTableCell>
+                            <CustomTableCell>{ttmRange(data) ? (data.ttmEbitda * (ttmRange(data)?.min ?? 0) - data.grossDebt + data.availability).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }) : '-'}</CustomTableCell>
+                            <CustomTableCell>{ttmRange(data) ? (data.ttmEbitda * (ttmRange(data)?.max ?? 0) - data.grossDebt + data.availability).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }) : '-'}</CustomTableCell>
                         </CustomTableRow>
                     </TableBody>
                 </Table>

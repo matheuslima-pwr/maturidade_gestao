@@ -147,7 +147,7 @@ export default function ValuationResultMobile({ data }: { data: ValuationData })
                                 <p className="text-gray-700 font-medium">{data.lastYearRevenue ? `${data.lastYearRevenue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}` : '-'}</p>
                             </div>
                             <div className="flex justify-between gap-2">
-                                <p className="text-gray-700 font-medium">Mercado</p>
+                                <p className="text-gray-700 font-medium">Média do Mercado</p>
                                 <p className="text-gray-700 font-medium">{sector ? `${sector.annual_net_revenue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}` : '-'}</p>
                             </div>
                             <hr className="my-4" />
@@ -184,7 +184,7 @@ export default function ValuationResultMobile({ data }: { data: ValuationData })
                                 <p className="text-gray-700 font-medium">{data.ttmRevenue ? `${data.ttmRevenue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}` : '-'}</p>
                             </div>
                             <div className="flex justify-between gap-2">
-                                <p className="text-gray-700 font-medium">Mercado</p>
+                                <p className="text-gray-700 font-medium">Média do Mercado</p>
                                 <p className="text-gray-700 font-medium">{sector ? `${sector.annual_net_revenue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}` : '-'}</p>
                             </div>
                             <hr className="my-4" />
@@ -308,13 +308,13 @@ export default function ValuationResultMobile({ data }: { data: ValuationData })
                                         <div className="flex justify-between items-center">
                                             <span className="text-xs md:text-sm text-muted-foreground">Min</span>
                                             <p className="text-lg font-medium">
-                                                {(data.ttmEbitda * (ttmRange()?.min ?? 0)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                                {(data.ttmEbitda * (ttmRange()?.min ?? 0)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}
                                             </p>
                                         </div>
                                         <div className="flex justify-between items-center">
                                             <span className="text-xs md:text-sm text-muted-foreground">Max</span>
                                             <p className="text-lg font-medium">
-                                                {(data.ttmEbitda * (ttmRange()?.max ?? 0)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                                {(data.ttmEbitda * (ttmRange()?.max ?? 0)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}
                                             </p>
                                         </div>
                                     </div>
@@ -326,13 +326,13 @@ export default function ValuationResultMobile({ data }: { data: ValuationData })
                                         <div className="flex justify-between items-center">
                                             <span className="text-xs md:text-sm text-muted-foreground">Min</span>
                                             <p className="text-lg font-medium">
-                                                {(data.ttmEbitda * (ttmRange()?.min ?? 0) - data.grossDebt + data.availability).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                                {(data.ttmEbitda * (ttmRange()?.min ?? 0) - data.grossDebt + data.availability).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}
                                             </p>
                                         </div>
                                         <div className="flex justify-between items-center">
                                             <span className="text-xs md:text-sm text-muted-foreground">Max</span>
                                             <p className="text-lg font-medium">
-                                                {(data.ttmEbitda * (ttmRange()?.max ?? 0) - data.grossDebt + data.availability).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                                {(data.ttmEbitda * (ttmRange()?.max ?? 0) - data.grossDebt + data.availability).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}
                                             </p>
                                         </div>
                                     </div>

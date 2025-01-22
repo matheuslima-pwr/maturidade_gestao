@@ -21,7 +21,7 @@ console.log('[Email Service] Verificando variáveis de ambiente:', {
 
 export const sendEmailService = async (userId: string, body: ValuationData) => {
     console.log(`[Email Service] Iniciando envio de email para usuário ID: ${userId}`);
-    
+
     const user = await prisma.userValuation.findUnique({
         where: {
             id: userId
@@ -60,7 +60,7 @@ export const sendEmailService = async (userId: string, body: ValuationData) => {
                 console.log('[Email Service] Obtendo access token...');
                 const accessTokenResponse = await oauth2Client.getAccessToken();
                 console.log('[Email Service] Access token obtido:', !!accessTokenResponse);
-                
+
                 if (!accessTokenResponse.token) {
                     throw new Error('Access token não obtido');
                 }
@@ -90,7 +90,7 @@ export const sendEmailService = async (userId: string, body: ValuationData) => {
         const sendEmail = async (emailOptions: SendMailOptions) => {
             console.log('[Email Service] Iniciando processo de envio do email');
             const emailTransporter = await createTransporter();
-            
+
             return new Promise((resolve, reject) => {
                 emailTransporter.sendMail(emailOptions, (error: Error | null, response: nodemailer.SentMessageInfo) => {
                     if (error) {
@@ -105,14 +105,19 @@ export const sendEmailService = async (userId: string, body: ValuationData) => {
             });
         };
 
-        await sendEmail({
-            from: process.env.SMTP_USER,
-            to: user.email,
-            subject: 'Resultado do seu Valuation',
-            text: 'Segue em anexo o resultado do seu Valuation fornecido pela PWR Gestão.',
-            html: htmlContent
-        });
-        
+        try {
+            await sendEmail({
+                from: '"PWR Gestão" <' + process.env.SMTP_USER + '>', // Nome do remetente adicionado
+                to: user.email,
+                subject: 'Resultado do seu Valuation',
+                text: 'Segue em anexo o resultado do seu Valuation fornecido pela PWR Gestão.',
+                html: htmlContent
+            });
+        } catch (error) {
+            console.error('[Email Service] Erro no envio:', error);
+            return NextResponse.json({ message: 'Error sending email' }, { status: 500 });
+        }
+
         console.log(`[Email Service] Processo finalizado com sucesso para ${user.email}`);
         return NextResponse.json({ message: 'Email sent' }, { status: 200 });
     } catch (error) {
