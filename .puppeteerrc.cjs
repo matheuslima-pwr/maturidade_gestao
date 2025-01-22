@@ -1,13 +1,9 @@
-const { join } = require('path')
+const { join } = require('path');
 
-/*
- * @type {import('puppeteer').Configuration}
+/**
+ * @type {import("puppeteer").Configuration}
  */
-
 module.exports = {
-    // Specify cache directory for Puppeteer
-    cacheDirectory: join(__dirname, '.cache', 'puppeteer'),
-    // Specify which Chromium version Puppeteer should install
-    executablePath: '/usr/bin/chromium-browser',
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  // Changes the cache location for Puppeteer
+  cacheDirectory: join(__dirname, '.cache', 'puppeteer'),
 };

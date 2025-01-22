@@ -83,7 +83,7 @@ export function createEmailTemplate({
             
             <div class="metrics-container">
                 <div class="metric-card">
-                    <div class="metric-title">Empresas¹</div>
+                    <div class="metric-title">Empresas [1]</div>
                     <div class="metric-value">${sector.number_of_companies}</div>
                 </div>
                 <div class="metric-card">

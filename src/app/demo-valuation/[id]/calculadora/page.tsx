@@ -83,9 +83,6 @@ export default function CompanyValuationCalculator() {
     })
 
     const handleSendEmail = async () => {
-        const element = document.getElementById('result-desktop')
-        if (!element) return
-
         try {
             setLoadingEmail(true)
             await api.post(`/api/valuation/users/${id}/send-email`, data)
