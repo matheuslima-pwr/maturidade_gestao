@@ -83,11 +83,11 @@ export function createEmailTemplate({
             
             <div class="metrics-container">
                 <div class="metric-card">
-                    <div class="metric-title">Empresas [1]</div>
+                    <div class="metric-title">Empresas¹</div>
                     <div class="metric-value">${sector.number_of_companies}</div>
                 </div>
                 <div class="metric-card">
-                    <div class="metric-title">Múltiplo EBITDA[2]</div>
+                    <div class="metric-title">Múltiplo EBITDA²</div>
                     <div class="metric-value">${sector.ev_ebitda.toFixed(1)}</div>
                 </div>
                 <div class="metric-card">
@@ -170,8 +170,8 @@ export function createEmailTemplate({
                     </tr>
                     <tr>
                         <td><strong>Valor da Firma:</strong></td>
-                        <td>R$ ${(data.ttmEbitda * (ttmRange(data)?.min ?? 0)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}</td>
-                        <td>R$ ${(data.ttmEbitda * (ttmRange(data)?.max ?? 0)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}</td>
+                        <td>${(data.ttmEbitda * (ttmRange(data)?.min ?? 0)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}</td>
+                        <td>${(data.ttmEbitda * (ttmRange(data)?.max ?? 0)).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })}</td>
                     </tr>
                     <tr>
                         <td><strong>Valor para Acionistas:</strong></td>
