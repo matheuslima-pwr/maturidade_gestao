@@ -25,18 +25,24 @@ export async function getUsersAverageAnswers() {
         // Buscar as respostas dos usuários
         const averageAnswers = await prisma.$queryRaw`
             SELECT
-            CASE
-                WHEN pergunta_id BETWEEN 1 AND 5 THEN 'Estrategia e Gestao'
-                WHEN pergunta_id BETWEEN 6 AND 10 THEN 'Financeiro'
-                WHEN pergunta_id BETWEEN 11 AND 15 THEN 'Comercial / Vendas'
-                WHEN pergunta_id BETWEEN 16 AND 20 THEN 'Liderança e Gestão de Pessoas'
-                WHEN pergunta_id BETWEEN 21 AND 25 THEN 'Jurídico'
-            END AS grupo,
-            AVG(CASE WHEN resposta = 'yes' THEN 1 ELSE 0 END) AS media
+                CASE
+                    WHEN pergunta_id BETWEEN 1 AND 5 THEN 'Estrategia e Gestao'
+                    WHEN pergunta_id BETWEEN 6 AND 10 THEN 'Financeiro'
+                    WHEN pergunta_id BETWEEN 11 AND 15 THEN 'Comercial / Vendas'
+                    WHEN pergunta_id BETWEEN 16 AND 20 THEN 'Liderança e Gestão de Pessoas'
+                    WHEN pergunta_id BETWEEN 21 AND 25 THEN 'Jurídico'
+                END AS grupo,
+                AVG(CASE WHEN r.resposta = 'yes' THEN 1 ELSE 0 END) AS media
             FROM
-            maturidade_gestao.respostas r 
+                maturidade_gestao.respostas r
+            INNER JOIN 
+                maturidade_gestao.usuarios u 
+            ON 
+                r.usuario_id = u.id
+            WHERE 
+                u.email NOT LIKE '%@pwrgestao.com'
             GROUP BY
-            grupo;
+                grupo;
         `;
         return averageAnswers;
     } catch (error) {
