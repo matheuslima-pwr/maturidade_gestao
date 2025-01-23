@@ -49,6 +49,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/navigation";
 import { Undo2 } from "lucide-react";
 import { AutoComplete } from "@/components/AutoComplete";
+import { cn } from "@/lib/utils";
 
 export default function Dashboard() {
     const [selectedUser, setSelectedUser] = useState<UserMaturidadeGestao | null>(null);
@@ -133,6 +134,12 @@ export default function Dashboard() {
             Resposta: 100 * (Number(userAvgAnswers.find(item => item.grupo === 'Liderança e Gestão de Pessoas')?.media) || 0),
             icon: 'fa-solid:user-tie'
         },
+        {
+            name: "Jurídico",
+            Media: 100 * (Number(averageAnswers.find(item => item.grupo === 'Jurídico')?.media) || 0),
+            Resposta: 100 * (Number(userAvgAnswers.find(item => item.grupo === 'Jurídico')?.media) || 0),
+            icon: 'fa-solid:balance-scale'
+        },
     ];
 
     const CustomLegend = (props: { payload: { color: string; payload: { dataKey: string; }; }[] }) => {
@@ -159,15 +166,17 @@ export default function Dashboard() {
                     <Undo2 size={20} />
                     Voltar para seleção
                 </Button>
-                <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
-                    <div className="grid auto-rows-max items-start gap-4 md:gap-4 lg:col-span-2">
-                        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-5 xl:grid-cols-5">
+                <main className="flex items-start gap-4 sm:px-6 sm:py-0">
+                    <div className="flex w-full flex-col gap-4">
+                        <div className="flex gap-4">
                             {dataset.map((data, index) => (
-                                loading ? <Skeleton key={index} className="h-[132px] w-full" /> :
-                                    <Card key={index} x-chunk={`A stats card showing the value of ${data.name} pillar.`}>
+                                loading ? <Skeleton key={index} className="h-[132px] w-[150px]" /> :
+                                    <Card key={index} className="bg-gray-100">
                                         <CardHeader className="pb-2">
                                             <CardDescription>{data.name}</CardDescription>
-                                            <CardTitle className="text-4xl flex items-center gap-2"><Icon icon={data.icon} width={24} height={24} />{data.Resposta ? `${data.Resposta}%` : 'N/A'}</CardTitle>
+                                            <CardTitle className="text-4xl flex items-center gap-2">
+                                                <Icon icon={data.icon} width={24} height={24} />{data.Resposta ? `${data.Resposta}%` : 'N/A'}
+                                            </CardTitle>
                                         </CardHeader>
                                         <CardFooter>
                                             <Progress value={data.Resposta} aria-label={`${data.Resposta}% of ${data.name} pillar`} />
@@ -175,110 +184,123 @@ export default function Dashboard() {
                                     </Card>
 
                             ))}
-                            {loading ? <Skeleton className="h-[132px] w-full" /> :
-                                <Card x-chunk="A stats card showing the average value of all pillars">
+                            {loading ?
+                                <Skeleton className="h-[132px] w-[150px]" /> :
+                                <Card className="bg-gray-100">
                                     <CardHeader className="pb-2">
                                         <CardDescription>Média Geral</CardDescription>
                                         <CardTitle className="text-4xl flex items-center">{userAvgAnswers?.length > 0 ? `${calculateAverage(userAvgAnswers)}%` : 'N/A'}</CardTitle>
                                     </CardHeader>
-                                </Card>}
+                                </Card>
+                            }
                         </div>
-                        <Card x-chunk="A table of answers from test." className="max-h-[600px] overflow-y-scroll">
+
+                        <Card className="flex-1">
                             <CardHeader className="px-7">
-                                <CardTitle className="text-black">Tabela das Respotas: {selectedUser?.nome}</CardTitle>
+                                <CardTitle className="text-black">Tabela das Respostas: {selectedUser?.nome}</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <Table>
-                                    <TableHeader>
-                                        <TableRow className="hover:bg-[#cacaca]">
-                                            <TableHead>Pergunta</TableHead>
-                                            <TableHead className="hidden sm:table-cell">
-                                                Pilar
-                                            </TableHead>
-                                            <TableHead className="hidden sm:table-cell">
-                                                Resposta
-                                            </TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        {questions.map((_, index) => (
-                                            <TableRow key={index} className="hover:bg-[#cacaca]">
-                                                <TableCell>
-                                                    <div className="flex items-center gap-2 max-w-[500px]">
-                                                        <div className="flex flex-col">
-                                                            <div className="text-sm text-foreground">{questions[index]?.content}</div>
-                                                        </div>
-                                                    </div>
-                                                </TableCell>
-                                                <TableCell className="hidden sm:table-cell">
-                                                    {questions[index]?.pillar}
-                                                </TableCell>
-                                                <TableCell className="hidden sm:table-cell">
-                                                    {loading ? <Skeleton className="w-10 h-6" /> :
-                                                        answers[index] ?
-                                                            <Badge className="bg-black/80 text-white">{answers[index]?.resposta === "yes" ? "Sim" : "Não"}</Badge> :
-                                                            <></>
-                                                    }
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
+                                <div className="flex flex-col h-[472px] overflow-hidden">
+                                    <div className="bg-black/80 sticky top-0 z-10">
+                                        <Table>
+                                            <TableHeader className="bg-black/80">
+                                                <TableRow>
+                                                    <TableHead className="w-[60%] text-white">Pergunta</TableHead>
+                                                    <TableHead className="w-[30%] text-white">
+                                                        Pilar
+                                                    </TableHead>
+                                                    <TableHead className="w-[10%] text-white">
+                                                        Resposta
+                                                    </TableHead>
+                                                </TableRow>
+                                            </TableHeader>
+                                        </Table>
+                                    </div>
+                                    <div className="flex-1 overflow-auto">
+                                        <Table>
+                                            <TableBody>
+                                                {questions.map((_, index) => (
+                                                    <TableRow key={index} className="hover:bg-gray-100">
+                                                        <TableCell className="w-[60%]">
+                                                            <div className="flex items-center gap-2 max-w-[80%]">
+                                                                <div className="flex flex-col">
+                                                                    <div className="text-sm text-foreground">{questions[index]?.content}</div>
+                                                                </div>
+                                                            </div>
+                                                        </TableCell>
+                                                        <TableCell className="w-[30%] font-bold">
+                                                            {questions[index]?.pillar}
+                                                        </TableCell>
+                                                        <TableCell className="w-[10%] text-center">
+                                                            {loading ? <Skeleton className="w-10 h-6" /> :
+                                                                answers[index] ?
+                                                                    <Badge className={cn("text-white", answers[index]?.resposta === "yes" ? "bg-[#2CB25A]" : "bg-[#A51B1B]")}>
+                                                                        {answers[index]?.resposta === "yes" ? "Sim" : "Não"}
+                                                                    </Badge> :
+                                                                    <></>
+                                                            }
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </div>
+                                </div>
                             </CardContent>
                         </Card>
                     </div>
-                    <div className="grid gap-4">
 
-                        <Card className="max-h-[132px]">
-                            <CardHeader className="pb-2">
-                                <CardTitle>Filtro de Email</CardTitle>
-                                <CardDescription>Escolha o Email do respondente</CardDescription>
-                            </CardHeader>
-                            <CardContent className="flex flex-col gap-2">
-                                <AutoComplete
-                                    options={leads.map((lead) => ({ label: lead.email, value: lead.id }))}
-                                    onValueChange={(option) => handleSelectEmail(option.value)}
-                                    placeholder="Digite o email..."
-                                    emptyMessage="Email não encontrado"
-                                    visibleItemsCount={5}
-                                />
-                            </CardContent>
-                        </Card>
-
-
-
-                        <div className="grid gap-3">
-                            <Card className="">
-                                <CardHeader className="items-center pb-4">
-                                    <CardTitle>Gráfico Radar</CardTitle>
-                                    <CardDescription>
-                                        Com os percentuais de acerto por pilar
-                                    </CardDescription>
+                    <div className="col-start-3 row-start-2 row-span-4">
+                        <div className="flex flex-col gap-4">
+                            <Card className="max-h-[132px]">
+                                <CardHeader className="pb-2">
+                                    <CardTitle>Filtro de Email</CardTitle>
+                                    <CardDescription className="text-gray-600">Escolha o Email do respondente</CardDescription>
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="w-full aspect-square h-[400px]">
-                                        <ResponsiveContainer width="100%" height="100%">
-                                            <RadarChart data={dataset}>
-                                                <PolarGrid />
-                                                <PolarAngleAxis dataKey="name" tick={{ fill: 'hsl(var(--foreground))', fontSize: 12 }} />
-                                                <PolarRadiusAxis angle={0} domain={[0, 100]} tick={{ fill: 'hsl(var(--foreground))', fontSize: 10 }} />
-                                                <Radar name="Media" dataKey="Media" stroke="hsl(var(--primary))" fill={chartConfig.Media.color} fillOpacity={0.4} />
-                                                <Radar name="Resposta" dataKey="Resposta" stroke="hsl(var(--secondary))" fill={chartConfig.Resposta.color} fillOpacity={0.6} />
-                                                <Legend content={<CustomLegend payload={[]} />} />
-                                            </RadarChart>
-                                        </ResponsiveContainer>
-                                    </div>
+                                    <AutoComplete
+                                        options={leads.map((lead) => ({ label: lead.email, value: lead.id }))}
+                                        onValueChange={(option) => handleSelectEmail(option.value)}
+                                        placeholder="Digite o email..."
+                                        emptyMessage="Email não encontrado"
+                                        visibleItemsCount={5}
+                                    />
                                 </CardContent>
-                                <CardFooter className="flex-col gap-2 pt-4 text-sm">
-                                    <div className="flex items-center gap-2 leading-none text-muted-foreground">
-                                        Pwr Gestão
-                                    </div>
-                                </CardFooter>
                             </Card>
+
+                            <div className="gap-3">
+                                <Card >
+                                    <CardHeader className="items-center pb-4">
+                                        <CardTitle>Gráfico Radar</CardTitle>
+                                        <CardDescription>
+                                            Com os percentuais de acerto por pilar
+                                        </CardDescription>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <div className="w-full aspect-square h-[400px]">
+                                            <ResponsiveContainer width="100%" height="100%">
+                                                <RadarChart data={dataset}>
+                                                    <PolarGrid />
+                                                    <PolarAngleAxis dataKey="name" tick={{ fill: 'hsl(var(--foreground))', fontSize: 12 }} />
+                                                    <PolarRadiusAxis angle={0} domain={[0, 100]} tick={{ fill: 'hsl(var(--foreground))', fontSize: 10 }} />
+                                                    <Radar name="Media" dataKey="Media" stroke="hsl(var(--primary))" fill={chartConfig.Media.color} fillOpacity={0.4} />
+                                                    <Radar name="Resposta" dataKey="Resposta" stroke="hsl(var(--secondary))" fill={chartConfig.Resposta.color} fillOpacity={0.6} />
+                                                    <Legend content={<CustomLegend payload={[]} />} />
+                                                </RadarChart>
+                                            </ResponsiveContainer>
+                                        </div>
+                                    </CardContent>
+                                    <CardFooter className="flex-col gap-2 pt-4 text-sm">
+                                        <div className="flex items-center gap-2 leading-none text-muted-foreground">
+                                            Pwr Gestão
+                                        </div>
+                                    </CardFooter>
+                                </Card>
+                            </div>
                         </div>
                     </div>
                 </main>
-            </div>
-        </div>
+            </div >
+        </div >
     )
 }

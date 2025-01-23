@@ -98,5 +98,30 @@
         "id": 20,
         "content": "Sua empresa possui uma sistemática periódica de feedbacks utilizando indicadores de desempenhos objetivos de forma que os líderes possam agir de forma meritocrática e justa?",
         "pillar": "Liderança e Gestão de Pessoas"
+    },
+    {
+        "id": 21,
+        "content": "Todos os colaboradores da sua empresa têm carteira assinada e contratos de trabalho formalizados por escrito, incluindo descrição de funções, penalidades e benefícios?",
+        "pillar": "Jurídico"
+    },
+    {
+        "id": 22,
+        "content": "Todas as relações com fornecedores, parceiros e clientes são regidas por contratos escritos, com cláusulas claras de obrigações, direitos e penalidades?",
+        "pillar": "Jurídico"
+    },
+    {
+        "id": 23,
+        "content": "Você tem um Acordo de Sócios assinado que discipline questões como entrada de cônjuges ou herdeiros no negócio, exclusão ou inclusão de sócio, diluição de participação societária e demais questões que julgue importantes de serem previstas na relação entre os sócios da sociedade?",
+        "pillar": "Jurídico"
+    },
+    {
+        "id": 24,
+        "content": "Você realiza, anualmente, o Planejamento Tributário do negócio, passa por auditorias periódicas para garantir o correto recolhimento dos tributos, garantindo a melhor eficiência tributária e afastando riscos de autuações fiscais?",
+        "pillar": "Jurídico"
+    },
+    {
+        "id": 25,
+        "content": "A empresa possui políticas internas documentadas e implementadas para o tratamento de dados pessoais em conformidade com a Lei Geral de Proteção de Dados (LGPD)?",
+        "pillar": "Jurídico"
     }
 ]

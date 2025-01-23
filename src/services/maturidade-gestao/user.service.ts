@@ -24,6 +24,7 @@ export async function getUsersAverageAnswers() {
                 WHEN pergunta_id BETWEEN 6 AND 10 THEN 'Financeiro'
                 WHEN pergunta_id BETWEEN 11 AND 15 THEN 'Comercial / Vendas'
                 WHEN pergunta_id BETWEEN 16 AND 20 THEN 'Liderança e Gestão de Pessoas'
+                WHEN pergunta_id BETWEEN 21 AND 25 THEN 'Jurídico'
             END AS grupo,
             AVG(CASE WHEN resposta = 'yes' THEN 1 ELSE 0 END) AS media
             FROM
@@ -48,6 +49,7 @@ export async function getAverageAnswersByUserId(userId: string) {
                 WHEN pergunta_id BETWEEN 6 AND 10 THEN 'Financeiro'
                 WHEN pergunta_id BETWEEN 11 AND 15 THEN 'Comercial / Vendas'
                 WHEN pergunta_id BETWEEN 16 AND 20 THEN 'Liderança e Gestão de Pessoas'
+                WHEN pergunta_id BETWEEN 21 AND 25 THEN 'Jurídico'
             END AS grupo,
             AVG(CASE WHEN resposta = 'yes' THEN 1 ELSE 0 END) AS media
             FROM
@@ -110,7 +112,11 @@ export async function getZoneByUser(userId: string) {
         // Buscar a zona do usuário no banco de dados
         const answers = await prisma.answerMaturidadeGestao.findMany({
             where: {
-                usuario_id: userId
+                usuario_id: userId,
+                pergunta_id: {
+                    gte: 1,
+                    lte: 20
+                }
             }
         });
 
@@ -138,13 +144,20 @@ export async function saveUserAnswers(userId: string, answers: { questionId: num
             throw new Error('Nenhuma resposta fornecida.');
         }
 
-        const savedAnswers = await prisma.answerMaturidadeGestao.createMany({
-            data: answers.map(answer => ({
-                usuario_id: userId,
-                resposta: answer.answer,
-                pergunta_id: answer.questionId,
-            })),
-        });
+        const [_, savedAnswers] = await prisma.$transaction([
+            prisma.answerMaturidadeGestao.deleteMany({
+                where: {
+                    usuario_id: userId
+                }
+            }),
+            prisma.answerMaturidadeGestao.createMany({
+                data: answers.map(answer => ({
+                    usuario_id: userId,
+                    resposta: answer.answer,
+                    pergunta_id: answer.questionId,
+                })),
+            }),
+        ]);
 
         return {
             success: true,
