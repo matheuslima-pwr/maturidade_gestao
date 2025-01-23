@@ -6,7 +6,13 @@ const prisma = new PrismaClient();
 export async function getUsers() {
     try {
         // Buscar os usuários no banco de dados
-        const users = await prisma.userMaturidadeGestao.findMany();
+        const users = await prisma.userMaturidadeGestao.findMany({
+            where: {
+                respostas: {
+                    some: {}
+                },
+            }
+        });
         return users;
     } catch (error) {
         console.error('Erro ao buscar usuários:', error);

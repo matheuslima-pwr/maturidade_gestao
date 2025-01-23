@@ -203,7 +203,7 @@ export default function Dashboard() {
                                 <div className="flex flex-col h-[472px] overflow-hidden">
                                     <div className="bg-black/80 sticky top-0 z-10">
                                         <Table>
-                                            <TableHeader className="bg-black/80">
+                                            <TableHeader>
                                                 <TableRow>
                                                     <TableHead className="w-[60%] text-white">Pergunta</TableHead>
                                                     <TableHead className="w-[30%] text-white">
@@ -220,7 +220,7 @@ export default function Dashboard() {
                                         <Table>
                                             <TableBody>
                                                 {questions.map((_, index) => (
-                                                    <TableRow key={index} className="hover:bg-gray-100">
+                                                    <TableRow key={index} className="hover:bg-gray-200">
                                                         <TableCell className="w-[60%]">
                                                             <div className="flex items-center gap-2 max-w-[80%]">
                                                                 <div className="flex flex-col">
@@ -231,7 +231,7 @@ export default function Dashboard() {
                                                         <TableCell className="w-[30%] font-bold">
                                                             {questions[index]?.pillar}
                                                         </TableCell>
-                                                        <TableCell className="w-[10%] text-center">
+                                                        <TableCell className="w-[10%]">
                                                             {loading ? <Skeleton className="w-10 h-6" /> :
                                                                 answers[index] ?
                                                                     <Badge className={cn("text-white", answers[index]?.resposta === "yes" ? "bg-[#2CB25A]" : "bg-[#A51B1B]")}>
@@ -252,7 +252,7 @@ export default function Dashboard() {
 
                     <div className="col-start-3 row-start-2 row-span-4">
                         <div className="flex flex-col gap-4">
-                            <Card className="max-h-[132px]">
+                            <Card className="max-h-[132px] z-10">
                                 <CardHeader className="pb-2">
                                     <CardTitle>Filtro de Email</CardTitle>
                                     <CardDescription className="text-gray-600">Escolha o Email do respondente</CardDescription>
