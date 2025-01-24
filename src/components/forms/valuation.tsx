@@ -88,16 +88,16 @@ export default function ValuationForm({ title, subtitle, route }: { title: strin
                 <h3 className="text-base sm:text-lg md:text-lg lg:text-lg text-form-foreground mb-4">
                     {subtitle}  
                 </h3>
-                <input className={styles.input} type="email" id="email" name="email" placeholder="Email" required/>
-                <label htmlFor="email"></label>
                 <input className={styles.input} type="text" id="nome" name="nome" placeholder="Nome" required/>
                 <label htmlFor="nome"></label>
-                <input className={styles.input} type="text" id="empresa" name="empresa" placeholder="Empresa" required/>
-                <label htmlFor="empresa"></label>
-                <input className={styles.input} type="text" id="segmento" name="segmento" placeholder="Segmento" required/>
-                <label htmlFor="segmento"></label>
+                <input className={styles.input} type="email" id="email" name="email" placeholder="E-mail" required/>
+                <label htmlFor="email"></label>
                 <input className={styles.input} type="text" id="telefone" onChange={phoneMask} name="telefone" placeholder="Telefone" required/>
                 <label htmlFor="telefone"></label>
+                <input className={styles.input} type="text" id="segmento" name="segmento" placeholder="Segmento de atuação" required/>
+                <label htmlFor="segmento"></label>
+                <input className={styles.input} type="text" id="empresa" name="empresa" placeholder="Nome da Empresa" required/>
+                <label htmlFor="empresa"></label>
                 <button type="submit" className="bg-[#004477] h-12 w-[60%] text-white rounded-md hover:bg-[#003366]">Enviar</button>
             </form>  
         </div>
